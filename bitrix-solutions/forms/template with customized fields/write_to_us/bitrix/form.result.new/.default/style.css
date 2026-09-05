@@ -1,0 +1,217 @@
+input, textarea, button, select {
+    font-family: inherit;
+    font-size: inherit;
+    color: inherit;
+    background-color: transparent;
+    border-radius: 0;
+}
+form h3 {
+    font-size: 28px;
+    font-weight: 500;
+    font-family: 'Golos Text', sans-serif;
+    line-height: 130%;
+    color: #000;
+    margin-bottom: 32px;
+}
+
+.reviews__form form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.contacts-page__form .reviews__input {
+    width: 49.5%;
+    padding-left: 16px;
+    padding-right: 16px;
+    box-sizing: border-box;
+}
+.contacts-page__form .reviews__input.prop_EMAIL {
+    width: 100%;
+}
+#contacts-form .reviews__input {
+    border: 1px solid #E9ECEF !important;
+}
+.page__input input {
+    font: 400 14px / 130% "Golos Text", sans-serif;
+    width: 100%;
+}
+.reviews__form .reviews__input {
+    position: relative;
+}
+.contacts-page__form .reviews__input input {
+    height: 48px;
+}
+#contacts-form input {
+    border: none;
+}
+label {
+    cursor: pointer;
+}
+.page__input label {
+    position: absolute;
+    top: 16px;
+    left: 12px;
+    font-size: 14px;
+    color: #ADB5BD;
+    background-color: white;
+    padding: 0 4px;
+    transition: 0.2s ease;
+    pointer-events: none;
+}
+.page__input input:focus + label, .page__input input:not(:placeholder-shown) + label {
+    top: -8px;
+    left: 8px;
+    font-size: 12px;
+    color: #333;
+}
+
+
+
+.contacts-page__form .reviews__input input {
+  height: 48px;
+}
+
+#contacts-form input {
+  border: none;
+}
+
+.page__input label {
+  position: absolute;
+  top: 16px;
+  left: 12px;
+  font-size: 14px;
+  color: #ADB5BD;
+  background-color: white;
+  padding: 0 4px;
+  transition: 0.2s ease;
+  pointer-events: auto;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.page__input input,
+.page__input textarea {
+  position: relative;
+  z-index: 1;
+}
+
+.page__input input:focus + label,
+.page__input input:not(:placeholder-shown) + label,
+.page__input textarea:focus + label,
+.page__input textarea:not(:placeholder-shown) + label {
+  top: -8px;
+  left: 8px;
+  font-size: 12px;
+  color: #333;
+}
+.reviews__input.textarea {
+    width: 100%;
+}
+
+.reviews__form textarea {
+    padding: 14px 0;
+    border: none;
+    outline: none;
+}
+.contacts-page__form .reviews__input textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+.reviews__input.textarea textarea {
+    width: 812px;
+    height: 120px;
+}
+.contacts-page__form .reviews__input.textarea textarea {
+    width: 100%;
+    font-size: 14px;
+}
+
+.styled-checkbox {
+    position: absolute;
+    opacity: 0;
+}
+.contacts-page__form .styled-checkbox {
+    display: none !important;
+}
+#contacts-form input {
+    border: none;
+}
+
+
+.styled-checkbox {
+    position: absolute;
+    opacity: 0;
+}
+.contacts-page__form .styled-checkbox {
+    display: none !important;
+}
+#contacts-form input {
+    border: none;
+}
+
+
+.modal__form-policy label {
+    display: flex;
+    gap: 8px;
+    font: 400 12px / 130% "Golos Text", sans-serif;
+    letter-spacing: -0.02em;
+    color: #ADB5BD;
+}
+
+.styled-checkbox + label {
+    position: relative;
+    cursor: pointer;
+    padding: 0;
+}
+.styled-checkbox + label:before {
+    content: "";
+    display: block;
+    border: 2px solid #ced4da;
+    width: 20px;
+    height: 20px;
+    min-width: 20px;
+    min-height: 20px;
+}
+.styled-checkbox:checked + label:after {
+    content: "";
+    position: absolute;
+    width: 21px;
+    height: 20px;
+    background-size: cover !important;
+    background: url(/include/check.svg);
+    background-repeat: no-repeat;
+    left: -1px;
+}
+.modal__form-policy label span {
+    font-size: 12px;
+    color: #ADB5BD;
+}
+
+.form-required 
+{
+	color: red;
+}
+input.btn.reviews__btn.modal__form-send {
+    width: 160px;
+    height: 48px;
+    padding: 15px 0;
+    background-color: #F4F7FA !important;
+    color: #495057 !important;
+}
+.modal__form-policy {
+    width: 100%;
+}
+.require {
+    width: 100%;
+    font-size: 12px;
+    color: #ADB5BD;
+}
+
+.error-fld {
+	display: block;
+	float: left;
+	height: 13px;
+	width: 15px;
+	background-repeat: no-repeat;
+	background-image: url(images/icon_warn.gif);
+}
