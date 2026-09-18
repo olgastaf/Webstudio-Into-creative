@@ -38,7 +38,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                         1
                     );
                     ?>
-                    <div class="reviews__input textarea page__input prop_<?=$FIELD_SID?>">
+                    <div class="ic-form__field ic-form__field--textarea prop_<?=$FIELD_SID?>">
                         <?=$html?>
                         <label for="prop_<?=$FIELD_SID?>">
                             <?=$arQuestion["CAPTION"]?>
@@ -59,7 +59,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                         1
                     );
                     ?>
-                    <div class="reviews__input page__input prop_<?=$FIELD_SID?>">
+                    <div class="ic-form__field prop_<?=$FIELD_SID?>">
                         <?=$html?>
                         <label for="prop_<?=$FIELD_SID?>">
                             <?=$arQuestion["CAPTION"]?>
