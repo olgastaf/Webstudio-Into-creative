@@ -30,6 +30,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
 			
 			switch ($fieldType) {
 				case 'textarea':
+				    // вывод textarea
                     $html = preg_replace(
                         '/<textarea\b/i',
                         '<textarea id="prop_' . $FIELD_SID . '"',
@@ -48,31 +49,9 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                     </div>
                     <?	
 					break;
-					
-				case 'checkbox':
-                    $answer = $arQuestion["STRUCTURE"][0];
-                    $value = CForm::GetCheckBoxValue($FIELD_SID, $answer, $arResult["arrVALUES"]);
-                    ?>
-                    <div class="modal__form-policy prop_<?=$FIELD_SID?>">
-                        <?=CForm::GetCheckBoxField(
-                            $FIELD_SID,
-                            $answer["ID"],
-                            $value,
-                            'class="styled-checkbox" id="prop_'.$FIELD_SID.'"'
-                        );?>
-                        <label for="prop_<?=$FIELD_SID?>">
-                            <? //echo '<pre>'.print_r($arQuestion,true).'</pre>';?>
-                            <?//=$arQuestion["CAPTION"]?>
-                            <span>Даю согласие на обработку персональных данных в целях обработки заявки и обратной связи на условиях <a href="/privacy-policy/">Политики конфиденциальности</a></span>
-                            <?if ($arQuestion["REQUIRED"] == "Y"):?>
-                                <?=$arResult["REQUIRED_SIGN"];?>
-                            <?endif;?>
-                        </label>
-                    </div>
-                    <?
-					break;
-					
+				
 				default:
+				    // вывод обычных input: text, email и т. п.
                     $html = preg_replace(
                         '/<input\b/i',
                         '<input id="prop_' . $FIELD_SID . '"',
