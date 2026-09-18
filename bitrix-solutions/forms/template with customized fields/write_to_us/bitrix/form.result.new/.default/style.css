@@ -14,7 +14,7 @@ form h3 {
     margin-bottom: 32px;
 }
 
-.reviews__form form {
+.ic-form {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
@@ -38,9 +38,7 @@ form h3 {
 .reviews__form .reviews__input {
     position: relative;
 }
-.contacts-page__form .reviews__input input {
-    height: 48px;
-}
+
 #contacts-form input {
     border: none;
 }
@@ -71,9 +69,6 @@ label {
   height: 48px;
 }
 
-#contacts-form input {
-  border: none;
-}
 
 .page__input label {
   position: absolute;
@@ -133,22 +128,6 @@ label {
 .contacts-page__form .styled-checkbox {
     display: none !important;
 }
-#contacts-form input {
-    border: none;
-}
-
-
-.styled-checkbox {
-    position: absolute;
-    opacity: 0;
-}
-.contacts-page__form .styled-checkbox {
-    display: none !important;
-}
-#contacts-form input {
-    border: none;
-}
-
 
 .modal__form-policy label {
     display: flex;
