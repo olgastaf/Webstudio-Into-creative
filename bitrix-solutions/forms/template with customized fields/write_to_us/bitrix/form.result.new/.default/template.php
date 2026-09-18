@@ -12,7 +12,8 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
 
     <?=$arResult["FORM_HEADER"] // Здесь появляется сообщение об ошибках ?>
 
-            <?=bitrix_sessid_post();?>
+    <form class="page__form" name="<?=$arResult["WEB_FORM_NAME"]?>" action="<?=POST_FORM_ACTION_URI?>" method="POST" enctype="multipart/form-data">
+        <?=bitrix_sessid_post();?>
         <input type="hidden" name="WEB_FORM_ID" value="<?=$arParams["WEB_FORM_ID"]?>">
         <input type="hidden" name="web_form_submit" value="Y">
 
@@ -27,71 +28,71 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
             <?
             $html = $arQuestion["HTML_CODE"];
             $fieldType = $arQuestion["STRUCTURE"]["0"]["FIELD_TYPE"] ?? '';
-
-            if ($fieldType === 'textarea')
-            {
-                $html = preg_replace(
-                    '/<textarea\b/i',
-                    '<textarea id="prop_' . $FIELD_SID . '"',
-                    $html,
-                    1
-                );
-                ?>
-                <div class="reviews__input textarea page__input prop_<?=$FIELD_SID?>">
-                    <?=$html?>
-                    <label for="prop_<?=$FIELD_SID?>">
-                        <?=$arQuestion["CAPTION"]?>
-                        <?if ($arQuestion["REQUIRED"] == "Y"):?>
-                            <?=$arResult["REQUIRED_SIGN"];?>
-                        <?endif;?>
-                    </label>
-                </div>
-                <?
-            }
-            elseif ($fieldType === 'checkbox')
-            {
-                $answer = $arQuestion["STRUCTURE"][0];
-                $value = CForm::GetCheckBoxValue($FIELD_SID, $answer, $arResult["arrVALUES"]);
-                ?>
-                <div class="modal__form-policy prop_<?=$FIELD_SID?>">
-                    <?=CForm::GetCheckBoxField(
-                        $FIELD_SID,
-                        $answer["ID"],
-                        $value,
-                        'class="styled-checkbox" id="prop_'.$FIELD_SID.'"'
-                    );?>
-                    <label for="prop_<?=$FIELD_SID?>">
-						<? //echo '<pre>'.print_r($arQuestion,true).'</pre>';?>
-						<?//=$arQuestion["CAPTION"]?>
-						<span>Даю согласие на обработку персональных данных в целях обработки заявки и обратной связи на условиях <a href="/privacy-policy/">Политики конфиденциальности</a></span>
-                        <?if ($arQuestion["REQUIRED"] == "Y"):?>
-                            <?=$arResult["REQUIRED_SIGN"];?>
-                        <?endif;?>
-                    </label>
-                </div>
-                <?
-            }
-            else
-            {
-                $html = preg_replace(
-                    '/<input\b/i',
-                    '<input id="prop_' . $FIELD_SID . '"',
-                    $html,
-                    1
-                );
-                ?>
-                <div class="reviews__input page__input prop_<?=$FIELD_SID?>">
-                    <?=$html?>
-                    <label for="prop_<?=$FIELD_SID?>">
-                        <?=$arQuestion["CAPTION"]?>
-                        <?if ($arQuestion["REQUIRED"] == "Y"):?>
-                            <?=$arResult["REQUIRED_SIGN"];?>
-                        <?endif;?>
-                    </label>
-                </div>
-                <?
-            }
-        }
+			
+			switch ($fieldType) {
+				case 'textarea':
+                    $html = preg_replace(
+                        '/<textarea\b/i',
+                        '<textarea id="prop_' . $FIELD_SID . '"',
+                        $html,
+                        1
+                    );
+                    ?>
+                    <div class="reviews__input textarea page__input prop_<?=$FIELD_SID?>">
+                        <?=$html?>
+                        <label for="prop_<?=$FIELD_SID?>">
+                            <?=$arQuestion["CAPTION"]?>
+                            <?if ($arQuestion["REQUIRED"] == "Y"):?>
+                                <?=$arResult["REQUIRED_SIGN"];?>
+                            <?endif;?>
+                        </label>
+                    </div>
+                    <?	
+					break;
+					
+				case 'checkbox':
+                    $answer = $arQuestion["STRUCTURE"][0];
+                    $value = CForm::GetCheckBoxValue($FIELD_SID, $answer, $arResult["arrVALUES"]);
+                    ?>
+                    <div class="modal__form-policy prop_<?=$FIELD_SID?>">
+                        <?=CForm::GetCheckBoxField(
+                            $FIELD_SID,
+                            $answer["ID"],
+                            $value,
+                            'class="styled-checkbox" id="prop_'.$FIELD_SID.'"'
+                        );?>
+                        <label for="prop_<?=$FIELD_SID?>">
+                            <? //echo '<pre>'.print_r($arQuestion,true).'</pre>';?>
+                            <?//=$arQuestion["CAPTION"]?>
+                            <span>Даю согласие на обработку персональных данных в целях обработки заявки и обратной связи на условиях <a href="/privacy-policy/">Политики конфиденциальности</a></span>
+                            <?if ($arQuestion["REQUIRED"] == "Y"):?>
+                                <?=$arResult["REQUIRED_SIGN"];?>
+                            <?endif;?>
+                        </label>
+                    </div>
+                    <?
+					break;
+					
+				default:
+                    $html = preg_replace(
+                        '/<input\b/i',
+                        '<input id="prop_' . $FIELD_SID . '"',
+                        $html,
+                        1
+                    );
+                    ?>
+                    <div class="reviews__input page__input prop_<?=$FIELD_SID?>">
+                        <?=$html?>
+                        <label for="prop_<?=$FIELD_SID?>">
+                            <?=$arQuestion["CAPTION"]?>
+                            <?if ($arQuestion["REQUIRED"] == "Y"):?>
+                                <?=$arResult["REQUIRED_SIGN"];?>
+                            <?endif;?>
+                        </label>
+                    </div>
+                    <?
+					break;
+			}
         ?>
 
         <?if ($arResult["isUseCaptcha"] == "Y"):?>
@@ -123,6 +124,10 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                 value="<?=htmlspecialcharsbx(trim($arResult["arForm"]["BUTTON"]) == '' ? GetMessage("FORM_ADD") : $arResult["arForm"]["BUTTON"]);?>"
             />
         </div>
-    <?=$arResult["FORM_FOOTER"]?>
+
+
+    </form>
+
+    <?//=$arResult["FORM_FOOTER"]?>
 
 <?endif;?>
