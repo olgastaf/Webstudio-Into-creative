@@ -19,36 +19,36 @@ form h3 {
     flex-wrap: wrap;
     gap: 8px;
 }
-.contacts-page__form .reviews__input {
-    width: 49.5%;
+.ic-form__field {
+    position: relative;
+    width: calc(50% - 4px);
     padding-left: 16px;
     padding-right: 16px;
     box-sizing: border-box;
 }
-.contacts-page__form .reviews__input.prop_EMAIL {
+.ic-form__field.ic-form__field--textarea {
     width: 100%;
 }
-#contacts-form .reviews__input {
+.ic-form__field.prop_email {
+    width: 100%;
+}
+.ic-form__field {
     border: 1px solid #E9ECEF !important;
 }
-.page__input input {
-    font: 400 14px / 130% "Golos Text", sans-serif;
-    width: 100%;
-}
-.reviews__form .reviews__input {
-    position: relative;
-}
 
-#contacts-form input {
+input {
     border: none;
 }
 label {
     cursor: pointer;
 }
-.contacts-page__form .reviews__input input {
+
+.ic-form__field input {
   height: 48px;
 }
-.page__input label {
+
+
+.ic-form__field label {
   position: absolute;
   top: 16px;
   left: 12px;
@@ -61,39 +61,47 @@ label {
   cursor: pointer;
   z-index: 2;
 }
-.page__input input,
-.page__input textarea {
-  position: relative;
-  z-index: 1;
+
+.ic-form__field input,
+.ic-form__field textarea {
+    font: 400 14px / 130% "Golos Text", sans-serif;
+    width: 100%;
+    position: relative;
+    z-index: 1;
+    box-sizing: content-box;
+}
+.ic-form__field input::placeholder, 
+.ic-form__field textarea::placeholder {
+    color: transparent;
 }
 
-.page__input input:focus + label,
-.page__input input:not(:placeholder-shown) + label,
-.page__input textarea:focus + label,
-.page__input textarea:not(:placeholder-shown) + label {
+.ic-form__field input:focus + label,
+.ic-form__field input:not(:placeholder-shown) + label,
+.ic-form__field textarea:focus + label,
+.ic-form__field textarea:not(:placeholder-shown) + label {
   top: -8px;
   left: 8px;
   font-size: 12px;
   color: #333;
 }
-.reviews__input.textarea {
+.ic-form__field--textarea {
     width: 100%;
 }
 
-.reviews__form textarea {
+.ic-form textarea {
     padding: 14px 0;
     border: none;
     outline: none;
 }
-.contacts-page__form .reviews__input textarea {
+.ic-form__field textarea {
     min-height: 100px;
     resize: vertical;
 }
-.reviews__input.textarea textarea {
+.ic-form__field--textarea textarea {
     width: 812px;
     height: 120px;
 }
-.contacts-page__form .reviews__input.textarea textarea {
+.ic-form__field--textarea textarea {
     width: 100%;
     font-size: 14px;
 }
@@ -102,7 +110,7 @@ label {
     position: absolute;
     opacity: 0;
 }
-.contacts-page__form .styled-checkbox {
+.styled-checkbox {
     display: none !important;
 }
 
