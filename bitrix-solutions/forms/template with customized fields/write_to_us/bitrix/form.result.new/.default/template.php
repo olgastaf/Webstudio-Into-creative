@@ -82,7 +82,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
 		        "IS_LOADED" => "N",
 		        "IS_CHECKED" => "N",
 		        "REPLACE" => [
-		            "button_caption" => "Отправить",
+		            "button_caption" => $arResult["arForm"]["BUTTON"],
 		            "fields" => [
 		                "Имя",
 		                "Телефон",
