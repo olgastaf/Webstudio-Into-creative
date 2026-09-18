@@ -11,7 +11,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
 <?if ($arResult["isFormNote"] != "Y"):?>
 
     <?=$arResult["FORM_HEADER"] // Здесь появляется сообщение об ошибках ?>
-
+    <div class="ic-form">
         <?=bitrix_sessid_post();?>
         <input type="hidden" name="WEB_FORM_ID" value="<?=$arParams["WEB_FORM_ID"]?>">
         <input type="hidden" name="web_form_submit" value="Y">
@@ -122,5 +122,5 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
         </div>
 
     <?=$arResult["FORM_FOOTER"]?>
-
+	</div>
 <?endif;?>
