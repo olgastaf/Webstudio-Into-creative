@@ -120,7 +120,6 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                 value="<?=htmlspecialcharsbx(trim($arResult["arForm"]["BUTTON"]) == '' ? GetMessage("FORM_ADD") : $arResult["arForm"]["BUTTON"]);?>"
             />
         </div>
-
-    <?=$arResult["FORM_FOOTER"]?>
 	</div>
+    <?=$arResult["FORM_FOOTER"]?>
 <?endif;?>
