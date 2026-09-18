@@ -27,8 +27,9 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
 
             <?
             $html = $arQuestion["HTML_CODE"];
+            $fieldType = $arQuestion["STRUCTURE"]["0"]["FIELD_TYPE"] ?? '';
 
-            if (stripos($html, '<textarea') !== false)
+            if ($fieldType === 'textarea')
             {
                 $html = preg_replace(
                     '/<textarea\b/i',
@@ -48,7 +49,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                 </div>
                 <?
             }
-            elseif (stripos($html, 'type="checkbox"') !== false)
+            elseif ($fieldType === 'checkbox')
             {
                 $answer = $arQuestion["STRUCTURE"][0];
                 $value = CForm::GetCheckBoxValue($FIELD_SID, $answer, $arResult["arrVALUES"]);
