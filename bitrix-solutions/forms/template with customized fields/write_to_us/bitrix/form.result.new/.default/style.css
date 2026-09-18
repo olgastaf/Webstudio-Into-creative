@@ -45,31 +45,9 @@ form h3 {
 label {
     cursor: pointer;
 }
-.page__input label {
-    position: absolute;
-    top: 16px;
-    left: 12px;
-    font-size: 14px;
-    color: #ADB5BD;
-    background-color: white;
-    padding: 0 4px;
-    transition: 0.2s ease;
-    pointer-events: none;
-}
-.page__input input:focus + label, .page__input input:not(:placeholder-shown) + label {
-    top: -8px;
-    left: 8px;
-    font-size: 12px;
-    color: #333;
-}
-
-
-
 .contacts-page__form .reviews__input input {
   height: 48px;
 }
-
-
 .page__input label {
   position: absolute;
   top: 16px;
@@ -83,7 +61,6 @@ label {
   cursor: pointer;
   z-index: 2;
 }
-
 .page__input input,
 .page__input textarea {
   position: relative;
