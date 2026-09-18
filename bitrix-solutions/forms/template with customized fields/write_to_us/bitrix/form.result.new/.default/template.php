@@ -12,7 +12,6 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
 
     <?=$arResult["FORM_HEADER"] // Здесь появляется сообщение об ошибках ?>
 
-    <form class="page__form" name="<?=$arResult["WEB_FORM_NAME"]?>" action="<?=POST_FORM_ACTION_URI?>" method="POST" enctype="multipart/form-data">
         <?=bitrix_sessid_post();?>
         <input type="hidden" name="WEB_FORM_ID" value="<?=$arParams["WEB_FORM_ID"]?>">
         <input type="hidden" name="web_form_submit" value="Y">
@@ -126,9 +125,6 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
             />
         </div>
 
-
-    </form>
-
-    <?//=$arResult["FORM_FOOTER"]?>
+    <?=$arResult["FORM_FOOTER"]?>
 
 <?endif;?>
