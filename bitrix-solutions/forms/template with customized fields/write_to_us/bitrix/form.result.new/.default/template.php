@@ -73,7 +73,24 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
 			}
 		}
         ?>
-
+		<?$APPLICATION->IncludeComponent(
+		    "bitrix:main.userconsent.request",
+		    "",
+		    [
+		        "ID" => 1, // Стандартное соглашение битрикса. Вместо него можно поставить собственное созданное соглашение с нужным id
+		        "AUTO_SAVE" => "Y",
+		        "IS_LOADED" => "N",
+		        "IS_CHECKED" => "N",
+		        "REPLACE" => [
+		            "button_caption" => "Отправить",
+		            "fields" => [
+		                "Имя",
+		                "Телефон",
+		                "Email"
+		            ],
+		        ],
+		    ]
+		);?>
         <?if ($arResult["isUseCaptcha"] == "Y"):?>
             <div>
                 <b><?=GetMessage("FORM_CAPTCHA_TABLE_TITLE")?></b>
