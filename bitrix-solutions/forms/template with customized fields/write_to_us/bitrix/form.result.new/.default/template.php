@@ -93,6 +93,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                     <?
 					break;
 			}
+		}
         ?>
 
         <?if ($arResult["isUseCaptcha"] == "Y"):?>
