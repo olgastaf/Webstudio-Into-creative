@@ -93,7 +93,7 @@ input.ic-form__submit {
     background-color: #F4F7FA;
     color: #495057;
 }
-.require {
+.ic-form__required-note {
     width: 100%;
     font-size: 12px;
     color: #ADB5BD;
@@ -107,3 +107,4 @@ input.ic-form__submit {
 	background-repeat: no-repeat;
 	background-image: url(images/icon_warn.gif);
 }
+

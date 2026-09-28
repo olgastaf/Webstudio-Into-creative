@@ -3,7 +3,9 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
 ?>
 
 <?if ($arResult["isFormErrors"] == "Y"):?>
-    <?=$arResult["FORM_ERRORS_TEXT"];?>
+    <div class="ic-form__errors">
+        <?=$arResult["FORM_ERRORS_TEXT"];?>
+    </div>
 <?endif;?>
 
 <?=$arResult["FORM_NOTE"]?>
@@ -19,12 +21,6 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
         <?
         foreach ($arResult["QUESTIONS"] as $FIELD_SID => $arQuestion)
         {
-            ?>
-            <?if (isset($arResult['FORM_ERRORS'][$FIELD_SID])):?>
-                <span class="error-fld" title="<?=htmlspecialcharsbx($arResult["FORM_ERRORS"][$FIELD_SID])?>"></span>
-            <?endif;?>
-
-            <?
             $html = $arQuestion["HTML_CODE"];
             $fieldType = $arQuestion["STRUCTURE"]["0"]["FIELD_TYPE"] ?? '';
 			
@@ -108,7 +104,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                 </div>
             </div>
         <?endif;?>
-		<div class="require">
+		<div class="ic-form__required-note">
             <?=$arResult["REQUIRED_SIGN"];?> - <?=GetMessage("FORM_REQUIRED_FIELDS")?>
         </div>
         <div>
