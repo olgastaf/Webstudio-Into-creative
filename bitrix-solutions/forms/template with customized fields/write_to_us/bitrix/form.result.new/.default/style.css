@@ -78,7 +78,6 @@
 .ic-form textarea {
     padding: 14px 0;
     border: none;
-    outline: none;
 }
 .ic-form__field textarea {
     min-height: 100px;

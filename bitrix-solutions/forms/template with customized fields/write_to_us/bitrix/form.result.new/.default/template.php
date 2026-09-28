@@ -19,55 +19,89 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
         <input type="hidden" name="web_form_submit" value="Y">
 
         <?
-        foreach ($arResult["QUESTIONS"] as $FIELD_SID => $arQuestion)
-        {
-            $html = $arQuestion["HTML_CODE"];
-            $fieldType = $arQuestion["STRUCTURE"]["0"]["FIELD_TYPE"] ?? '';
-			
-			switch ($fieldType) {
-				case 'textarea':
-				    // вывод textarea
-                    $html = preg_replace(
-                        '/<textarea\b/i',
-                        '<textarea id="prop_' . $FIELD_SID . '"',
-                        $html,
-                        1
-                    );
-                    ?>
-                    <div class="ic-form__field ic-form__field--textarea prop_<?=$FIELD_SID?>">
-                        <?=$html?>
-                        <label for="prop_<?=$FIELD_SID?>">
-                            <?=$arQuestion["CAPTION"]?>
-                            <?if ($arQuestion["REQUIRED"] == "Y"):?>
-                                <?=$arResult["REQUIRED_SIGN"];?>
-                            <?endif;?>
-                        </label>
-                    </div>
-                    <?	
-					break;
-				
-				default:
-				    // вывод обычных input: text, email и т. п.
-                    $html = preg_replace(
-                        '/<input\b/i',
-                        '<input id="prop_' . $FIELD_SID . '"',
-                        $html,
-                        1
-                    );
-                    ?>
-                    <div class="ic-form__field prop_<?=$FIELD_SID?>">
-                        <?=$html?>
-                        <label for="prop_<?=$FIELD_SID?>">
-                            <?=$arQuestion["CAPTION"]?>
-                            <?if ($arQuestion["REQUIRED"] == "Y"):?>
-                                <?=$arResult["REQUIRED_SIGN"];?>
-                            <?endif;?>
-                        </label>
-                    </div>
-                    <?
-					break;
-			}
-		}
+      foreach ($arResult["QUESTIONS"] as $FIELD_SID => $arQuestion)
+      {
+          $html = $arQuestion["HTML_CODE"];
+          $fieldType = $arQuestion["STRUCTURE"][0]["FIELD_TYPE"] ?? '';
+
+          // ID поля для связи input/textarea с label.
+          // Если Bitrix уже сформировал id — сохраняем его.
+          // Если id нет — создаём собственный.
+          $fieldId = 'prop_' . $FIELD_SID;
+
+          $hasId = preg_match(
+              '/\bid=["\']([^"\']+)["\']/i',
+              $html,
+              $matches
+          );
+
+          if ($hasId) {
+              $fieldId = $matches[1];
+          }
+
+          switch ($fieldType) {
+
+              case 'textarea':
+
+                  // Добавляем id только в том случае,
+                  // если Bitrix не добавил его самостоятельно.
+                  if (!$hasId) {
+                      $html = preg_replace(
+                          '/<textarea\b/i',
+                          '<textarea id="' . htmlspecialcharsbx($fieldId) . '"',
+                          $html,
+                          1
+                      );
+                  }
+                  ?>
+
+                  <div class="ic-form__field ic-form__field--textarea prop_<?=$FIELD_SID?>">
+                      <?=$html?>
+
+                      <label for="<?=htmlspecialcharsbx($fieldId)?>">
+                          <?=$arQuestion["CAPTION"]?>
+
+                          <?if ($arQuestion["REQUIRED"] == "Y"):?>
+                              <?=$arResult["REQUIRED_SIGN"];?>
+                          <?endif;?>
+                      </label>
+                  </div>
+
+                  <?
+                  break;
+
+
+              default:
+
+                  // Обычные текстовые input: text, email и т. п.
+                  // Добавляем id только в том случае,
+                  // если Bitrix не добавил его самостоятельно.
+                  if (!$hasId) {
+                      $html = preg_replace(
+                          '/<input\b/i',
+                          '<input id="' . htmlspecialcharsbx($fieldId) . '"',
+                          $html,
+                          1
+                      );
+                  }
+                  ?>
+
+                  <div class="ic-form__field prop_<?=$FIELD_SID?>">
+                      <?=$html?>
+
+                      <label for="<?=htmlspecialcharsbx($fieldId)?>">
+                          <?=$arQuestion["CAPTION"]?>
+
+                          <?if ($arQuestion["REQUIRED"] == "Y"):?>
+                              <?=$arResult["REQUIRED_SIGN"];?>
+                          <?endif;?>
+                      </label>
+                  </div>
+
+                  <?
+                  break;
+          }
+      }
         ?>
 		<?$APPLICATION->IncludeComponent(
 		    "bitrix:main.userconsent.request",
