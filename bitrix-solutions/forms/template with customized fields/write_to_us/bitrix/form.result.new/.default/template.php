@@ -114,7 +114,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
         <div>
             <input
                 <?=(intval($arResult["F_RIGHT"]) < 10 ? 'disabled="disabled"' : '');?>
-                class="btn reviews__btn modal__form-send"
+                class="ic-form__submit"
                 type="submit"
                 name="web_form_submit"
                 value="<?=htmlspecialcharsbx(trim($arResult["arForm"]["BUTTON"]) == '' ? GetMessage("FORM_ADD") : $arResult["arForm"]["BUTTON"]);?>"

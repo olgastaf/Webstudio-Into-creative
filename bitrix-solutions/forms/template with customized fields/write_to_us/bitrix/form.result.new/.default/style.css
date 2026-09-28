@@ -99,12 +99,12 @@ label {
 {
 	color: red;
 }
-input.btn.reviews__btn.modal__form-send {
+input.ic-form__submit {
     width: 160px;
     height: 48px;
     padding: 15px 0;
-    background-color: #F4F7FA !important;
-    color: #495057 !important;
+    background-color: #F4F7FA;
+    color: #495057;
 }
 .require {
     width: 100%;
