@@ -55,7 +55,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                   }
                   ?>
 
-                  <div class="ic-form__field ic-form__field--textarea prop_<?=$FIELD_SID?>">
+                  <div class="ic-form__field ic-form__field--textarea prop_<?<?=htmlspecialcharsbx($FIELD_SID)?>
                       <?=$html?>
 
                       <label for="<?=htmlspecialcharsbx($fieldId)?>">
@@ -86,7 +86,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                   }
                   ?>
 
-                  <div class="ic-form__field prop_<?=$FIELD_SID?>">
+                  <div class="ic-form__field prop_<?<?=htmlspecialcharsbx($FIELD_SID)?>
                       <?=$html?>
 
                       <label for="<?=htmlspecialcharsbx($fieldId)?>">
