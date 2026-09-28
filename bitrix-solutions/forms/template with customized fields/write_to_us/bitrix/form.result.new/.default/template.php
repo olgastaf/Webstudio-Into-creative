@@ -1,5 +1,15 @@
 <?
 if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
+
+// Настройки шаблона
+$consentAgreementId = 1;
+
+// Поля, которые будут перечислены в тексте соглашения
+$consentFields = [
+    "Имя",
+    "Телефон",
+    "Email",
+];
 ?>
 
 <?if ($arResult["isFormErrors"] == "Y"):?>
@@ -107,17 +117,13 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
 		    "bitrix:main.userconsent.request",
 		    "",
 		    [
-		        "ID" => 1, // Стандартное соглашение битрикса. Вместо него можно поставить собственное созданное соглашение с нужным id
+		        "ID" => $consentAgreementId, // Стандартное соглашение битрикса. Вместо него можно поставить собственное созданное соглашение с нужным id
 		        "AUTO_SAVE" => "Y",
 		        "IS_LOADED" => "N",
 		        "IS_CHECKED" => "N",
 		        "REPLACE" => [
 		            "button_caption" => $arResult["arForm"]["BUTTON"],
-		            "fields" => [
-		                "Имя",
-		                "Телефон",
-		                "Email"
-		            ],
+		            "fields" => $consentFields,
 		        ],
 		    ]
 		);?>
