@@ -48,7 +48,10 @@
 
 .ic-form__field input,
 .ic-form__field textarea {
-    font: 400 14px / 130% "Golos Text", sans-serif;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 130%;    
     width: 100%;
     position: relative;
     z-index: 1;
