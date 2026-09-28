@@ -26,9 +26,6 @@ form h3 {
     padding-right: 16px;
     box-sizing: border-box;
 }
-.ic-form__field.ic-form__field--textarea {
-    width: 100%;
-}
 .ic-form__field.prop_email {
     width: 100%;
 }
