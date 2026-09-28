@@ -19,7 +19,7 @@
     padding-left: 16px;
     padding-right: 16px;
     box-sizing: border-box;
-    border: 1px solid #E9ECEF !important;
+    border: 1px solid #E9ECEF;
 }
 .ic-form__field.prop_email {
     width: 100%;
