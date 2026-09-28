@@ -1,19 +1,13 @@
-input, textarea, button, select {
+.ic-form input,
+.ic-form textarea,
+.ic-form button,
+.ic-form select {
     font-family: inherit;
     font-size: inherit;
     color: inherit;
     background-color: transparent;
     border-radius: 0;
 }
-form h3 {
-    font-size: 28px;
-    font-weight: 500;
-    font-family: 'Golos Text', sans-serif;
-    line-height: 130%;
-    color: #000;
-    margin-bottom: 32px;
-}
-
 .ic-form {
     display: flex;
     flex-wrap: wrap;
@@ -33,13 +27,9 @@ form h3 {
     border: 1px solid #E9ECEF !important;
 }
 
-input {
+.ic-form input {
     border: none;
 }
-label {
-    cursor: pointer;
-}
-
 .ic-form__field input {
   height: 48px;
 }
