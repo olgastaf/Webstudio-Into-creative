@@ -97,14 +97,6 @@ label {
     min-height: 100px;
     resize: vertical;
 }
-.ic-form__field--textarea textarea {
-    width: 812px;
-    height: 120px;
-}
-.ic-form__field--textarea textarea {
-    width: 100%;
-    font-size: 14px;
-}
 
 .styled-checkbox {
     position: absolute;
