@@ -254,8 +254,7 @@
 				textarea: null,
 				buttonAccept: null,
 				buttonReject: null,
-				buttonClose: null,
-				popupContent: null
+				buttonClose: null
 			},
 			onAccept: function ()
 			{
@@ -291,9 +290,7 @@
 
 				this.isInit = true;
 				this.nodes.container = popup;
-				this.nodes.popupContent = this.nodes.container.querySelector(
-				    '.main-user-consent-request-popup-cont'
-				);
+
 				this.nodes.shadow = this.nodes.container.querySelector('[data-bx-shadow]');
 				this.nodes.head = this.nodes.container.querySelector('[data-bx-head]');
 				this.nodes.loader = this.nodes.container.querySelector('[data-bx-loader]');

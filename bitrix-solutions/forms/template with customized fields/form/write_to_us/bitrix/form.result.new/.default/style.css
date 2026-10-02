@@ -24,11 +24,10 @@
 .ic-form__field.prop_email {
     width: 100%;
 }
-.ic-form input {
-    border: none;
-}
+
 .ic-form__field input {
-  height: 48px;
+    border: none;
+    height: 48px;
 }
 
 

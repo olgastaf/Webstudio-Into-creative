@@ -65,7 +65,7 @@ $consentFields = [
                   }
                   ?>
 
-                  <div class="ic-form__field ic-form__field--textarea prop_<?<?=htmlspecialcharsbx($FIELD_SID)?>
+                  <div class="ic-form__field ic-form__field--textarea prop_<?=htmlspecialcharsbx($FIELD_SID)?>
                       <?=$html?>
 
                       <label for="<?=htmlspecialcharsbx($fieldId)?>">
@@ -96,7 +96,7 @@ $consentFields = [
                   }
                   ?>
 
-                  <div class="ic-form__field prop_<?<?=htmlspecialcharsbx($FIELD_SID)?>
+                  <div class="ic-form__field prop_<?=htmlspecialcharsbx($FIELD_SID)?>
                       <?=$html?>
 
                       <label for="<?=htmlspecialcharsbx($fieldId)?>">
