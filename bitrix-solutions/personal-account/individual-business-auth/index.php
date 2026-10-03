@@ -51,7 +51,7 @@
 
     <?$APPLICATION->IncludeComponent(
         "bitrix:main.register",
-        "individual-business-auth",
+        "individual-business-reg",
         Array(
             "SHOW_FIELDS" => ["EMAIL", "NAME", "LAST_NAME", "PERSONAL_PHONE", "WORK_COMPANY"],
             "USER_PROPERTY" => ["UF_CLIENT_TYPE", "UF_INN", "UF_KPP", "UF_BUSINESS_ADDRESS"],
