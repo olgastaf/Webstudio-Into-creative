@@ -226,8 +226,13 @@ document.getElementById('bx_auth_secure').style.display = 'inline-block';
     ["UF_INN", "UF_KPP", "UF_BUSINESS_ADDRESS"],
     true
 ) ? ' data-business-field' : ''?>>
-    <td><?=$arUserField["EDIT_FORM_LABEL"]?><td><?=$arUserField["EDIT_FORM_LABEL"]?>:<?php if ($arUserField["MANDATORY"]=="Y"):?><span class="starrequired">*</span><?php endif;?></td><td>
-			<?php
+<td>
+    <?=htmlspecialcharsbx($arUserField["EDIT_FORM_LABEL"])?>:
+    <?php if ($arUserField["MANDATORY"] === "Y"):?>
+        <span class="starrequired">*</span>
+    <?php endif;?>
+</td>
+<td>			<?php
 if ($FIELD_NAME === "UF_CLIENT_TYPE"):
     // Получаем реальные ID вариантов списка на текущем сайте.
     $clientTypes = [];
