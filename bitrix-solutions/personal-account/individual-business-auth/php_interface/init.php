@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 $registrationHandler = __DIR__
     . '/include/individual_business_registration.php';
