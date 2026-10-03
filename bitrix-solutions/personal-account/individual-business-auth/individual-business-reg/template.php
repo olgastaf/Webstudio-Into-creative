@@ -1,376 +1,197 @@
 <?php
-/**
- * Bitrix Framework
- * @package bitrix
- * @subpackage main
- * @copyright 2001-2024 Bitrix
- */
-
-use Bitrix\Main\Web\Json;
-
-/**
- * Bitrix vars
- * @global CMain $APPLICATION
- * @global CUser $USER
- * @var array $arParams
- * @var array $arResult
- * @var CBitrixComponentTemplate $this
- */
-
-if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true)
-	die();
-
-if($arResult["SHOW_SMS_FIELD"] == true)
-{
-	CJSCore::Init('phone_auth');
+if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
+    die();
 }
-?>
-<div
-    class="bx-auth-reg"
-    data-registration-open="<?=(
-        !empty($arResult['ERRORS'])
-        || !empty($arResult['SHOW_SMS_FIELD'])
-    ) ? 'Y' : 'N'?>"
->
 
-<?php if($USER->IsAuthorized()):?>
-
-<p><?= GetMessage("MAIN_REGISTER_AUTH")?></p>
-
-<?php else:?>
-<?php
-if (!empty($arResult["ERRORS"])):
-	foreach ($arResult["ERRORS"] as $key => $error)
-		if (intval($key) == 0 && $key !== 0) 
-			$arResult["ERRORS"][$key] = str_replace("#FIELD_NAME#", "&quot;".GetMessage("REGISTER_FIELD_".$key)."&quot;", $error);
-
-	ShowError(implode("<br />", $arResult["ERRORS"]));
-
-elseif($arResult["USE_EMAIL_CONFIRMATION"] === "Y"):
-?>
-<p><?= GetMessage("REGISTER_EMAIL_WILL_BE_SENT")?></p>
-<?php endif?>
-
-<?php if($arResult["SHOW_SMS_FIELD"] == true):?>
-
-<form method="post" action="<?=POST_FORM_ACTION_URI?>" name="regform">
-	<?php
-if($arResult["BACKURL"] <> ''):
-?>
-	<input type="hidden" name="backurl" value="<?=$arResult["BACKURL"]?>" />
-<?php
-endif;
-?>
-<input type="hidden" name="SIGNED_DATA" value="<?=htmlspecialcharsbx($arResult["SIGNED_DATA"])?>" />
-<table>
-	<tbody>
-		<tr>
-			<td><?= GetMessage("main_register_sms")?><span class="starrequired">*</span></td>
-			<td><input size="30" type="text" name="SMS_CODE" value="<?=htmlspecialcharsbx($arResult["SMS_CODE"])?>" autocomplete="off" /></td>
-		</tr>
-	</tbody>
-	<tfoot>
-		<tr>
-			<td></td>
-			<td><input type="submit" name="code_submit_button" value="<?= GetMessage("main_register_sms_send")?>" /></td>
-		</tr>
-	</tfoot>
-</table>
-</form>
-
-<script>
-new BX.PhoneAuth({
-	containerId: 'bx_register_resend',
-	errorContainerId: 'bx_register_error',
-	interval: <?=$arResult["PHONE_CODE_RESEND_INTERVAL"]?>,
-	data:
-		<?= Json::encode([
-			'signedData' => $arResult["SIGNED_DATA"],
-		]) ?>,
-	onError:
-		function(response)
-		{
-			var errorDiv = BX('bx_register_error');
-			var errorNode = BX.findChildByClassName(errorDiv, 'errortext');
-			errorNode.innerHTML = '';
-			for(var i = 0; i < response.errors.length; i++)
-			{
-				errorNode.innerHTML = errorNode.innerHTML + BX.util.htmlspecialchars(response.errors[i].message) + '<br>';
-			}
-			errorDiv.style.display = '';
-		}
-});
-</script>
-
-<div id="bx_register_error" style="display:none"><?php ShowError("error")?></div>
-
-<div id="bx_register_resend"></div>
-
-<?php else:?>
-
-<form method="post" action="<?=POST_FORM_ACTION_URI?>" name="regform" enctype="multipart/form-data">
-<?php
-if($arResult["BACKURL"] <> ''):
-?>
-	<input type="hidden" name="backurl" value="<?=$arResult["BACKURL"]?>" />
-<?php
-endif;
-?>
-
-<table>
-	<thead>
-		<tr>
-			<td colspan="2"><b><?=GetMessage("AUTH_REGISTER")?></b></td>
-		</tr>
-	</thead>
-	<tbody>
-<?php foreach ($arResult["SHOW_FIELDS"] as $FIELD):?>
-	<?php if($FIELD == "AUTO_TIME_ZONE" && $arResult["TIME_ZONE_ENABLED"] == true):?>
-		<tr>
-			<td><?= GetMessage("main_profile_time_zones_auto")?><?php if ($arResult["REQUIRED_FIELDS_FLAGS"][$FIELD] == "Y"):?><span class="starrequired">*</span><?php endif?></td>
-			<td>
-				<select name="REGISTER[AUTO_TIME_ZONE]" onchange="this.form.elements['REGISTER[TIME_ZONE]'].disabled=(this.value != 'N')">
-					<option value=""><?= GetMessage("main_profile_time_zones_auto_def")?></option>
-					<option value="Y"<?=$arResult["VALUES"][$FIELD] == "Y" ? " selected=\"selected\"" : ""?>><?= GetMessage("main_profile_time_zones_auto_yes")?></option>
-					<option value="N"<?=$arResult["VALUES"][$FIELD] == "N" ? " selected=\"selected\"" : ""?>><?= GetMessage("main_profile_time_zones_auto_no")?></option>
-				</select>
-			</td>
-		</tr>
-		<tr>
-			<td><?= GetMessage("main_profile_time_zones_zones")?></td>
-			<td>
-				<select name="REGISTER[TIME_ZONE]"<?php if(!isset($_REQUEST["REGISTER"]["TIME_ZONE"])) echo 'disabled="disabled"'?>>
-		<?php foreach($arResult["TIME_ZONE_LIST"] as $tz=>$tz_name):?>
-					<option value="<?=htmlspecialcharsbx($tz)?>"<?=$arResult["VALUES"]["TIME_ZONE"] == $tz ? " selected=\"selected\"" : ""?>><?=htmlspecialcharsbx($tz_name)?></option>
-		<?php endforeach?>
-				</select>
-			</td>
-		</tr>
-	<?php else:?>
-		<tr<?=$FIELD === "WORK_COMPANY" ? ' data-business-field' : ''?>>
-			<td><?=GetMessage("REGISTER_FIELD_".$FIELD)?>:<?php if ($arResult["REQUIRED_FIELDS_FLAGS"][$FIELD] == "Y"):?><span class="starrequired">*</span><?php endif?></td>
-			<td><?php
-	switch ($FIELD)
-	{
-		case "PASSWORD":
-			?><input size="30" type="password" name="REGISTER[<?=$FIELD?>]" value="<?=$arResult["VALUES"][$FIELD]?>" autocomplete="off" class="bx-auth-input" />
-<?php if($arResult["SECURE_AUTH"]):?>
-				<span class="bx-auth-secure" id="bx_auth_secure" title="<?= GetMessage("AUTH_SECURE_NOTE")?>" style="display:none">
-					<div class="bx-auth-secure-icon"></div>
-				</span>
-				<noscript>
-				<span class="bx-auth-secure" title="<?= GetMessage("AUTH_NONSECURE_NOTE")?>">
-					<div class="bx-auth-secure-icon bx-auth-secure-unlock"></div>
-				</span>
-				</noscript>
-<script>
-document.getElementById('bx_auth_secure').style.display = 'inline-block';
-</script>
-<?php endif?>
-			<?php
-			break;
-		case "CONFIRM_PASSWORD":
-			?><input size="30" type="password" name="REGISTER[<?=$FIELD?>]" value="<?=$arResult["VALUES"][$FIELD]?>" autocomplete="off" /><?php
-			break;
-
-		case "PERSONAL_GENDER":
-			?><select name="REGISTER[<?=$FIELD?>]">
-				<option value=""><?=GetMessage("USER_DONT_KNOW")?></option>
-				<option value="M"<?=$arResult["VALUES"][$FIELD] == "M" ? " selected=\"selected\"" : ""?>><?=GetMessage("USER_MALE")?></option>
-				<option value="F"<?=$arResult["VALUES"][$FIELD] == "F" ? " selected=\"selected\"" : ""?>><?=GetMessage("USER_FEMALE")?></option>
-			</select><?php
-			break;
-
-		case "PERSONAL_COUNTRY":
-		case "WORK_COUNTRY":
-			?><select name="REGISTER[<?=$FIELD?>]"><?php
-			foreach ($arResult["COUNTRIES"]["reference_id"] as $key => $value)
-			{
-				?><option value="<?=$value?>"<?php if ($value == $arResult["VALUES"][$FIELD]):?> selected="selected"<?php endif?>><?=$arResult["COUNTRIES"]["reference"][$key]?></option>
-				<?php
-			}
-			?></select><?php
-			break;
-
-		case "PERSONAL_PHOTO":
-		case "WORK_LOGO":
-			?><input size="30" type="file" name="REGISTER_FILES_<?=$FIELD?>" /><?php
-			break;
-
-		case "PERSONAL_NOTES":
-		case "WORK_NOTES":
-			?><textarea cols="30" rows="5" name="REGISTER[<?=$FIELD?>]"><?=$arResult["VALUES"][$FIELD]?></textarea><?php
-			break;
-		default:
-			if ($FIELD == "PERSONAL_BIRTHDAY"):?><small><?=$arResult["DATE_FORMAT"]?></small><br /><?php endif;
-			?><input size="30" type="text" name="REGISTER[<?=$FIELD?>]" value="<?=$arResult["VALUES"][$FIELD]?>" /><?php
-				if ($FIELD == "PERSONAL_BIRTHDAY")
-					$APPLICATION->IncludeComponent(
-						'bitrix:main.calendar',
-						'',
-						array(
-							'SHOW_INPUT' => 'N',
-							'FORM_NAME' => 'regform',
-							'INPUT_NAME' => 'REGISTER[PERSONAL_BIRTHDAY]',
-							'SHOW_TIME' => 'N'
-						),
-						null,
-						array("HIDE_ICONS"=>"Y")
-					);
-				?><?php
-	}?></td>
-		</tr>
-	<?php endif?>
-<?php endforeach?>
-<?php
-// ********************* User properties ***************************************************?>
-<?php if($arResult["USER_PROPERTIES"]["SHOW"] == "Y"):?>
-	<tr><td colspan="2"><?=trim($arParams["USER_PROPERTY_NAME"]) <> '' ? $arParams["USER_PROPERTY_NAME"] : GetMessage("USER_TYPE_EDIT_TAB")?></td></tr>
-	<?php foreach ($arResult["USER_PROPERTIES"]["DATA"] as $FIELD_NAME => $arUserField):?>
-	<tr<?=in_array(
-    $FIELD_NAME,
-    ["UF_INN", "UF_KPP", "UF_BUSINESS_ADDRESS"],
-    true
-) ? ' data-business-field' : ''?>>
-<td>
-    <?=htmlspecialcharsbx($arUserField["EDIT_FORM_LABEL"])?>:
-    <?php if ($arUserField["MANDATORY"] === "Y"):?>
-        <span class="starrequired">*</span>
-    <?php endif;?>
-</td>
-<td>			<?php
-if ($FIELD_NAME === "UF_CLIENT_TYPE"):
-    // Получаем реальные ID вариантов списка на текущем сайте.
-    $clientTypes = [];
-
+// VALUES уже экранированы компонентом. Декодируем и экранируем один раз
+// непосредственно при выводе в атрибуты HTML.
+$values = $arResult['VALUES'] ?? [];
+$value = static function ($key) use ($values) {
+    $v = $values[$key] ?? '';
+    return is_scalar($v) ? htmlspecialcharsback((string)$v) : '';
+};
+$properties = $arResult['USER_PROPERTIES']['DATA'] ?? [];
+$propertyValue = static function ($key) use ($properties) {
+    // При ошибке стандартный редактор Битрикса берёт значения из запроса.
+    $v = ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST[$key]))
+        ? $_POST[$key]
+        : ($properties[$key]['VALUE'] ?? '');
+    if (is_array($v)) {
+        $v = reset($v);
+    }
+    return is_scalar($v) ? (string)$v : '';
+};
+$types = [];
+if (!empty($properties['UF_CLIENT_TYPE']['ID'])) {
     $enumResult = CUserFieldEnum::GetList(
-        ["SORT" => "ASC", "ID" => "ASC"],
-        ["USER_FIELD_ID" => (int)$arUserField["ID"]]
+        ['SORT' => 'ASC', 'ID' => 'ASC'],
+        ['USER_FIELD_ID' => (int)$properties['UF_CLIENT_TYPE']['ID']]
     );
-
     while ($enum = $enumResult->Fetch()) {
-        if (in_array($enum["XML_ID"], ["individual", "business"], true)) {
-            $clientTypes[$enum["XML_ID"]] = $enum;
+        if (in_array($enum['XML_ID'], ['individual', 'business'], true)) {
+            $types[$enum['XML_ID']] = $enum;
         }
     }
-
-    // После ошибки сохраняем выбор. При первом открытии — частное лицо.
-    $selectedType = $arUserField["VALUE"] ?? "";
-
-    if (is_array($selectedType)) {
-        $selectedType = reset($selectedType);
-    }
-
-    if (!$arResult["bVarsFromForm"]) {
-        $selectedType = $clientTypes["individual"]["ID"] ?? "";
-    }
-
-    foreach (["individual", "business"] as $typeCode):
-        if (!isset($clientTypes[$typeCode])) {
-            continue;
-        }
-
-        $type = $clientTypes[$typeCode];
-        $inputId = "register-client-type-" . $typeCode;
-        ?>
-        <label for="<?=htmlspecialcharsbx($inputId)?>">
-            <input
-                type="radio"
-                id="<?=htmlspecialcharsbx($inputId)?>"
-                name="UF_CLIENT_TYPE"
-                value="<?=(int)$type["ID"]?>"
-                data-client-type="<?=htmlspecialcharsbx($typeCode)?>"
-                <?=((string)$selectedType === (string)$type["ID"])
-                    ? 'checked'
-                    : ''?>
-                required
-            >
-            <?=htmlspecialcharsbx($type["VALUE"])?>
-        </label>
-        <br>
-    <?php endforeach; ?>
-
-<?php else:
-    // Остальные пользовательские поля пока выводим штатным способом.
-    $APPLICATION->IncludeComponent(
-        "bitrix:system.field.edit",
-        $arUserField["USER_TYPE"]["USER_TYPE_ID"],
-        [
-            "bVarsFromForm" => $arResult["bVarsFromForm"],
-            "arUserField" => $arUserField,
-            "form_name" => "regform",
-        ],
-        null,
-        ["HIDE_ICONS" => "Y"]
-    );
-endif;
-?>				</td></tr>
-	<?php endforeach;?>
-<?php endif;?>
-<?php
-// ******************** /User properties ***************************************************?>
-<?php
-/* CAPTCHA */
-if ($arResult["USE_CAPTCHA"] == "Y")
-{
-	?>
-		<tr>
-			<td colspan="2"><b><?=GetMessage("REGISTER_CAPTCHA_TITLE")?></b></td>
-		</tr>
-		<tr>
-			<td></td>
-			<td>
-				<input type="hidden" name="captcha_sid" value="<?=$arResult["CAPTCHA_CODE"]?>" />
-				<img src="/bitrix/tools/captcha.php?captcha_sid=<?=$arResult["CAPTCHA_CODE"]?>" width="180" height="40" alt="CAPTCHA" />
-			</td>
-		</tr>
-		<tr>
-			<td><?=GetMessage("REGISTER_CAPTCHA_PROMT")?>:<span class="starrequired">*</span></td>
-			<td><input type="text" name="captcha_word" maxlength="50" value="" autocomplete="off" /></td>
-		</tr>
-<?php
 }
-/* !CAPTCHA */
+$selected = $propertyValue('UF_CLIENT_TYPE');
+if (empty($arResult['bVarsFromForm'])) {
+    $selected = (string)($types['individual']['ID'] ?? '');
+}
+$isBusiness = isset($types['business']) && $selected === (string)$types['business']['ID'];
+$submitted = $_SERVER['REQUEST_METHOD'] === 'POST'
+    && (isset($_POST['register_submit_button']) || isset($_POST['code_submit_button']));
+$created = (int)($values['USER_ID'] ?? 0) > 0;
+$sms = !empty($arResult['SHOW_SMS_FIELD']);
+$errors = $arResult['ERRORS'] ?? [];
+$success = $created && !$sms;
+$open = $submitted || !empty($errors) || $sms;
+$authorized = $USER->IsAuthorized();
+
+// У этих input подпись всегда связана с уникальным id.
+$renderInput = static function ($key, $label, $name, $fieldValue, $type, $required, $autocomplete, $disabled = false, $business = false) {
+    $id = 'reg-' . strtolower($key);
+    ?>
+    <div class="registration-field"<?= $business ? ' data-business-field' : '' ?><?= $disabled ? ' hidden' : '' ?>>
+        <input class="registration-field__input" id="<?=htmlspecialcharsbx($id)?>"
+            type="<?=htmlspecialcharsbx($type)?>" name="<?=htmlspecialcharsbx($name)?>"
+            value="<?=htmlspecialcharsbx($fieldValue)?>" placeholder=" "
+            autocomplete="<?=htmlspecialcharsbx($autocomplete)?>"
+            <?=$required ? 'required' : ''?> <?=$disabled ? 'disabled' : ''?>
+            <?=$business && $required ? 'data-business-required' : ''?>
+            <?=in_array($key, ['UF_INN', 'UF_KPP'], true) ? 'inputmode="numeric"' : ''?>
+            <?=$key === 'UF_INN' ? 'maxlength="12"' : ''?>
+            <?=$key === 'UF_KPP' ? 'maxlength="9"' : ''?>>
+        <label class="registration-field__label" for="<?=htmlspecialcharsbx($id)?>">
+            <?=htmlspecialcharsbx($label)?><?=$required ? ' *' : ''?>
+        </label>
+    </div>
+    <?php
+};
 ?>
-	</tbody>
-	<tfoot>
-		<tr>
-			<td colspan="2">
-				<div class="registration-consent">
-    <label for="registration-consent">
-        <input
-            type="checkbox"
-            id="registration-consent"
-            name="registration_consent"
-            value="Y"
-            required
-        >
-        <span>
-            Я даю согласие на обработку персональных данных
-            в соответствии с
-            <a
-                href="/privacy-policy/"
-                target="_blank"
-                rel="noopener"
-            >Политикой конфиденциальности</a>.
-        </span>
-    </label>
-</div>	
-			</td>
-</tr>		
-		<tr>
-			<td></td>
-			<td><input type="submit" name="register_submit_button" value="<?=GetMessage("AUTH_REGISTER")?>" /></td>
-		</tr>
-	</tfoot>
-</table>
-</form>
+<div class="bx-auth-reg registration" data-registration-open="<?=$open ? 'Y' : 'N'?>">
+    <h2 id="registration-title" class="registration__title">Регистрация</h2>
 
-<p><?= $arResult["GROUP_POLICY"]["PASSWORD_REQUIREMENTS"];?></p>
+    <?php if ($errors): ?>
+        <div class="registration-message registration-message--error" role="alert" tabindex="-1">
+            <?php foreach ($errors as $key => $error):
+                if (!is_scalar($error)) {
+                    $error = 'Не удалось выполнить вход после регистрации. Попробуйте войти через форму авторизации.';
+                }
+                $caption = GetMessage('REGISTER_FIELD_' . $key) ?: (string)$key;
+                $message = str_replace('#FIELD_NAME#', $caption, (string)$error);
+                // Ошибки Битрикса могут содержать HTML-разрывы строк.
+                $message = preg_replace('~<br\s*/?>~i', "\n", $message);
+                ?>
+                <div><?=nl2br(htmlspecialcharsbx(htmlspecialcharsback(strip_tags($message))))?></div>
+            <?php endforeach; ?>
+        </div>
+    <?php endif; ?>
 
-<?php endif //$arResult["SHOW_SMS_FIELD"] == true ?>
+    <?php if ($sms):
+        CJSCore::Init('phone_auth'); ?>
+        <p class="registration__description">Введите код подтверждения из SMS.</p>
+        <form method="post" action="<?=POST_FORM_ACTION_URI?>" name="regform" class="registration-form">
+            <?=bitrix_sessid_post()?>
+            <input type="hidden" name="SIGNED_DATA" value="<?=htmlspecialcharsbx($arResult['SIGNED_DATA'])?>">
+            <?php $renderInput('SMS_CODE', 'Код из SMS', 'SMS_CODE', htmlspecialcharsback((string)($arResult['SMS_CODE'] ?? '')), 'text', true, 'one-time-code'); ?>
+            <button class="registration-button" type="submit" name="code_submit_button" value="Y">Подтвердить телефон</button>
+        </form>
+        <div id="bx_register_error" class="registration-message registration-message--error" hidden><span class="errortext"></span></div>
+        <div id="bx_register_resend"></div>
+        <script>
+        BX.ready(function () {
+            new BX.PhoneAuth({
+                containerId: 'bx_register_resend',
+                errorContainerId: 'bx_register_error',
+                interval: <?=(int)$arResult['PHONE_CODE_RESEND_INTERVAL']?>,
+                data: <?=\Bitrix\Main\Web\Json::encode(['signedData' => $arResult['SIGNED_DATA']])?>,
+                onError: function (response) {
+                    var box = document.getElementById('bx_register_error');
+                    box.querySelector('.errortext').textContent = response.errors.map(function (item) { return item.message; }).join('\n');
+                    box.hidden = false;
+                }
+            });
+        });
+        </script>
+    <?php elseif ($success || $authorized): ?>
+        <div class="registration-message registration-message--success" role="status" tabindex="-1">
+            <?php if ($success): ?>
+                <strong>Регистрация успешно завершена.</strong>
+                <?php if (($arResult['USE_EMAIL_CONFIRMATION'] ?? 'N') === 'Y'): ?>
+                    <p>На ваш email отправлено письмо. Перейдите по ссылке в письме, чтобы подтвердить регистрацию.</p>
+                <?php elseif (!$authorized): ?>
+                    <p>Теперь вы можете войти в свой аккаунт.</p>
+                <?php endif; ?>
+            <?php else: ?>
+                <strong>Вы уже вошли в свой аккаунт.</strong>
+            <?php endif; ?>
+        </div>
+        <?php if ($authorized): ?>
+            <a href="/personal/" class="registration-button">Перейти в личный кабинет</a>
+        <?php endif; ?>
+    <?php else: ?>
+        <form method="post" action="<?=POST_FORM_ACTION_URI?>" name="regform" class="registration-form">
+            <?=bitrix_sessid_post()?>
+            <input type="hidden" name="REGISTER[LOGIN]" value="<?=htmlspecialcharsbx($value('EMAIL'))?>">
+            <input type="hidden" name="REGISTER[CONFIRM_PASSWORD]" value="">
 
-<p><span class="starrequired">*</span><?=GetMessage("AUTH_REQ")?></p>
+            <fieldset class="registration-types">
+                <legend class="registration__heading">Тип клиента</legend>
+                <?php foreach (['individual', 'business'] as $code):
+                    if (!isset($types[$code])) { continue; }
+                    $option = $types[$code]; ?>
+                    <label class="registration-radio" for="reg-type-<?=htmlspecialcharsbx($code)?>">
+                        <input type="radio" name="UF_CLIENT_TYPE" id="reg-type-<?=htmlspecialcharsbx($code)?>"
+                            value="<?=(int)$option['ID']?>" data-client-type="<?=htmlspecialcharsbx($code)?>"
+                            <?=$selected === (string)$option['ID'] ? 'checked' : ''?> required>
+                        <span><?=htmlspecialcharsbx($option['VALUE'])?></span>
+                    </label>
+                <?php endforeach; ?>
+            </fieldset>
 
-<?php endif?>
+            <div class="registration-section" data-business-field <?=$isBusiness ? '' : 'hidden'?>>
+                <h3 class="registration__heading">Реквизиты компании</h3>
+                <?php $renderInput('UF_INN', 'ИНН', 'UF_INN', $propertyValue('UF_INN'), 'text', true, 'off', !$isBusiness, true); ?>
+                <button type="button" class="registration-button registration-button--secondary" data-action="fill-by-inn" disabled aria-describedby="reg-inn-hint">Заполнить по ИНН</button>
+                <p id="reg-inn-hint" class="registration__hint">Пока заполните реквизиты вручную.</p>
+                <?php
+                $renderInput('UF_KPP', 'КПП (для организаций)', 'UF_KPP', $propertyValue('UF_KPP'), 'text', false, 'off', !$isBusiness, true);
+                $renderInput('UF_BUSINESS_ADDRESS', 'Адрес', 'UF_BUSINESS_ADDRESS', $propertyValue('UF_BUSINESS_ADDRESS'), 'text', true, 'off', !$isBusiness, true);
+                $renderInput('WORK_COMPANY', 'Наименование компании / ИП', 'REGISTER[WORK_COMPANY]', $value('WORK_COMPANY'), 'text', true, 'organization', !$isBusiness, true);
+                ?>
+            </div>
+
+            <div class="registration-section">
+                <h3 class="registration__heading">Личные данные</h3>
+                <?php
+                $renderInput('LAST_NAME', 'Фамилия', 'REGISTER[LAST_NAME]', $value('LAST_NAME'), 'text', true, 'family-name');
+                $renderInput('NAME', 'Имя', 'REGISTER[NAME]', $value('NAME'), 'text', true, 'given-name');
+                $renderInput('SECOND_NAME', 'Отчество', 'REGISTER[SECOND_NAME]', $value('SECOND_NAME'), 'text', false, 'additional-name');
+                $renderInput('EMAIL', 'Email', 'REGISTER[EMAIL]', $value('EMAIL'), 'email', true, 'email');
+                $renderInput('PERSONAL_PHONE', 'Телефон', 'REGISTER[PERSONAL_PHONE]', $value('PERSONAL_PHONE'), 'tel', true, 'tel');
+                if (!empty($arResult['PHONE_REQUIRED'])) {
+                    // При SMS-регистрации передаём этот же телефон как PHONE_NUMBER.
+                    echo '<input type="hidden" name="REGISTER[PHONE_NUMBER]" value="">';
+                }
+                ?>
+            </div>
+            <?php $renderInput('PASSWORD', 'Пароль', 'REGISTER[PASSWORD]', '', 'password', true, 'new-password'); ?>
+            <?php if (!empty($arResult['GROUP_POLICY']['PASSWORD_REQUIREMENTS'])): ?>
+                <div class="registration__hint"><?=strip_tags($arResult['GROUP_POLICY']['PASSWORD_REQUIREMENTS'], '<br><b><strong>')?></div>
+            <?php endif; ?>
+
+            <?php if (($arResult['USE_CAPTCHA'] ?? 'N') === 'Y'): ?>
+                <div class="registration-captcha">
+                    <input type="hidden" name="captcha_sid" value="<?=htmlspecialcharsbx($arResult['CAPTCHA_CODE'])?>">
+                    <img src="/bitrix/tools/captcha.php?captcha_sid=<?=urlencode($arResult['CAPTCHA_CODE'])?>" width="180" height="40" alt="Код проверки">
+                    <?php $renderInput('CAPTCHA', 'Код с картинки', 'captcha_word', '', 'text', true, 'off'); ?>
+                </div>
+            <?php endif; ?>
+            <label class="registration-consent" for="registration-consent">
+                <input type="checkbox" id="registration-consent" name="registration_consent" value="Y" required>
+                <span>Я даю согласие на обработку персональных данных в соответствии с <a href="/privacy-policy/" target="_blank" rel="noopener">Политикой конфиденциальности</a>.</span>
+            </label>
+            <button class="registration-button" type="submit" name="register_submit_button" value="Y">Зарегистрироваться</button>
+        </form>
+    <?php endif; ?>
 </div>

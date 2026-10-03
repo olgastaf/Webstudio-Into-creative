@@ -19,6 +19,16 @@ function infoCreativeValidateBusinessRegistration(&$fields)
     }
 $request = \Bitrix\Main\Context::getCurrent()->getRequest();
 
+if (!check_bitrix_sessid()) {
+    $APPLICATION->ThrowException('Сессия истекла. Обновите страницу и повторите регистрацию.');
+    return false;
+}
+
+// Не доверяем скрытому полю LOGIN.
+$email = $fields['EMAIL'] ?? '';
+$fields['LOGIN'] = is_string($email) ? trim($email) : '';
+
+
 if ($request->getPost('registration_consent') !== 'Y') {
     $APPLICATION->ThrowException(
         'Для регистрации необходимо согласие на обработку персональных данных.'
