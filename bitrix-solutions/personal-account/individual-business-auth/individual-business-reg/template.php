@@ -71,30 +71,6 @@ endif;
 	</tbody>
 	<tfoot>
 		<tr>
-			<td colspan="2">
-				<div class="registration-consent">
-    <label for="registration-consent">
-        <input
-            type="checkbox"
-            id="registration-consent"
-            name="registration_consent"
-            value="Y"
-            required
-        >
-        <span>
-            Я даю согласие на обработку персональных данных
-            в соответствии с
-            <a
-                href="/privacy-policy/"
-                target="_blank"
-                rel="noopener"
-            >Политикой конфиденциальности</a>.
-        </span>
-    </label>
-</div>	
-			</td>
-</tr>
-		<tr>
 			<td></td>
 			<td><input type="submit" name="code_submit_button" value="<?= GetMessage("main_register_sms_send")?>" /></td>
 		</tr>
@@ -358,6 +334,30 @@ if ($arResult["USE_CAPTCHA"] == "Y")
 ?>
 	</tbody>
 	<tfoot>
+		<tr>
+			<td colspan="2">
+				<div class="registration-consent">
+    <label for="registration-consent">
+        <input
+            type="checkbox"
+            id="registration-consent"
+            name="registration_consent"
+            value="Y"
+            required
+        >
+        <span>
+            Я даю согласие на обработку персональных данных
+            в соответствии с
+            <a
+                href="/privacy-policy/"
+                target="_blank"
+                rel="noopener"
+            >Политикой конфиденциальности</a>.
+        </span>
+    </label>
+</div>	
+			</td>
+</tr>		
 		<tr>
 			<td></td>
 			<td><input type="submit" name="register_submit_button" value="<?=GetMessage("AUTH_REGISTER")?>" /></td>
