@@ -25,7 +25,13 @@ if($arResult["SHOW_SMS_FIELD"] == true)
 	CJSCore::Init('phone_auth');
 }
 ?>
-<div class="bx-auth-reg">
+<div
+    class="bx-auth-reg"
+    data-registration-open="<?=(
+        !empty($arResult['ERRORS'])
+        || !empty($arResult['SHOW_SMS_FIELD'])
+    ) ? 'Y' : 'N'?>"
+>
 
 <?php if($USER->IsAuthorized()):?>
 

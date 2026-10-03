@@ -72,7 +72,10 @@ if (!defined('INDIVIDUAL_BUSINESS_REGISTRATION')) {
 <script>
 $(function () {
   const $modal = $('#register-modal');
-
+if ($modal.find('[data-registration-open="Y"]').length) {
+    $modal.removeAttr('hidden');
+    $('body').css('overflow', 'hidden');
+}
   $('#open-register').on('click', function () {
     $modal.removeAttr('hidden');
     $('body').css('overflow', 'hidden');
