@@ -222,10 +222,73 @@ document.getElementById('bx_auth_secure').style.display = 'inline-block';
 	<tr><td colspan="2"><?=trim($arParams["USER_PROPERTY_NAME"]) <> '' ? $arParams["USER_PROPERTY_NAME"] : GetMessage("USER_TYPE_EDIT_TAB")?></td></tr>
 	<?php foreach ($arResult["USER_PROPERTIES"]["DATA"] as $FIELD_NAME => $arUserField):?>
 	<tr><td><?=$arUserField["EDIT_FORM_LABEL"]?>:<?php if ($arUserField["MANDATORY"]=="Y"):?><span class="starrequired">*</span><?php endif;?></td><td>
-			<?php $APPLICATION->IncludeComponent(
-				"bitrix:system.field.edit",
-				$arUserField["USER_TYPE"]["USER_TYPE_ID"],
-				array("bVarsFromForm" => $arResult["bVarsFromForm"], "arUserField" => $arUserField, "form_name" => "regform"), null, array("HIDE_ICONS"=>"Y"));?></td></tr>
+			<?php
+if ($FIELD_NAME === "UF_CLIENT_TYPE"):
+    // Получаем реальные ID вариантов списка на текущем сайте.
+    $clientTypes = [];
+
+    $enumResult = CUserFieldEnum::GetList(
+        ["SORT" => "ASC", "ID" => "ASC"],
+        ["USER_FIELD_ID" => (int)$arUserField["ID"]]
+    );
+
+    while ($enum = $enumResult->Fetch()) {
+        if (in_array($enum["XML_ID"], ["individual", "business"], true)) {
+            $clientTypes[$enum["XML_ID"]] = $enum;
+        }
+    }
+
+    // После ошибки сохраняем выбор. При первом открытии — частное лицо.
+    $selectedType = $arUserField["VALUE"] ?? "";
+
+    if (is_array($selectedType)) {
+        $selectedType = reset($selectedType);
+    }
+
+    if (!$arResult["bVarsFromForm"]) {
+        $selectedType = $clientTypes["individual"]["ID"] ?? "";
+    }
+
+    foreach (["individual", "business"] as $typeCode):
+        if (!isset($clientTypes[$typeCode])) {
+            continue;
+        }
+
+        $type = $clientTypes[$typeCode];
+        $inputId = "register-client-type-" . $typeCode;
+        ?>
+        <label for="<?=htmlspecialcharsbx($inputId)?>">
+            <input
+                type="radio"
+                id="<?=htmlspecialcharsbx($inputId)?>"
+                name="UF_CLIENT_TYPE"
+                value="<?=(int)$type["ID"]?>"
+                data-client-type="<?=htmlspecialcharsbx($typeCode)?>"
+                <?=((string)$selectedType === (string)$type["ID"])
+                    ? 'checked'
+                    : ''?>
+                required
+            >
+            <?=htmlspecialcharsbx($type["VALUE"])?>
+        </label>
+        <br>
+    <?php endforeach; ?>
+
+<?php else:
+    // Остальные пользовательские поля пока выводим штатным способом.
+    $APPLICATION->IncludeComponent(
+        "bitrix:system.field.edit",
+        $arUserField["USER_TYPE"]["USER_TYPE_ID"],
+        [
+            "bVarsFromForm" => $arResult["bVarsFromForm"],
+            "arUserField" => $arUserField,
+            "form_name" => "regform",
+        ],
+        null,
+        ["HIDE_ICONS" => "Y"]
+    );
+endif;
+?>				</td></tr>
 	<?php endforeach;?>
 <?php endif;?>
 <?php
