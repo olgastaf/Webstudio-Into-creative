@@ -141,7 +141,7 @@ endif;
 			</td>
 		</tr>
 	<?php else:?>
-		<tr>
+		<tr<?=$FIELD === "WORK_COMPANY" ? ' data-business-field' : ''?>>
 			<td><?=GetMessage("REGISTER_FIELD_".$FIELD)?>:<?php if ($arResult["REQUIRED_FIELDS_FLAGS"][$FIELD] == "Y"):?><span class="starrequired">*</span><?php endif?></td>
 			<td><?php
 	switch ($FIELD)
@@ -221,7 +221,12 @@ document.getElementById('bx_auth_secure').style.display = 'inline-block';
 <?php if($arResult["USER_PROPERTIES"]["SHOW"] == "Y"):?>
 	<tr><td colspan="2"><?=trim($arParams["USER_PROPERTY_NAME"]) <> '' ? $arParams["USER_PROPERTY_NAME"] : GetMessage("USER_TYPE_EDIT_TAB")?></td></tr>
 	<?php foreach ($arResult["USER_PROPERTIES"]["DATA"] as $FIELD_NAME => $arUserField):?>
-	<tr><td><?=$arUserField["EDIT_FORM_LABEL"]?>:<?php if ($arUserField["MANDATORY"]=="Y"):?><span class="starrequired">*</span><?php endif;?></td><td>
+	<tr<?=in_array(
+    $FIELD_NAME,
+    ["UF_INN", "UF_KPP", "UF_BUSINESS_ADDRESS"],
+    true
+) ? ' data-business-field' : ''?>>
+    <td><?=$arUserField["EDIT_FORM_LABEL"]?><td><?=$arUserField["EDIT_FORM_LABEL"]?>:<?php if ($arUserField["MANDATORY"]=="Y"):?><span class="starrequired">*</span><?php endif;?></td><td>
 			<?php
 if ($FIELD_NAME === "UF_CLIENT_TYPE"):
     // Получаем реальные ID вариантов списка на текущем сайте.
