@@ -48,7 +48,11 @@
   <div class="register-modal__overlay"></div>
   <div class="register-modal__box">
     <button type="button" class="register-modal__close" aria-label="Закрыть">&times;</button>
-
+<?php
+if (!defined('INDIVIDUAL_BUSINESS_REGISTRATION')) {
+    define('INDIVIDUAL_BUSINESS_REGISTRATION', true);
+}
+?>
     <?$APPLICATION->IncludeComponent(
         "bitrix:main.register",
         "individual-business-reg",
