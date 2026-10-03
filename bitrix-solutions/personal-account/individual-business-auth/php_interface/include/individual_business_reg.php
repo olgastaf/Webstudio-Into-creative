@@ -17,7 +17,14 @@ function infoCreativeValidateBusinessRegistration(&$fields)
     ) {
         return true;
     }
+$request = \Bitrix\Main\Context::getCurrent()->getRequest();
 
+if ($request->getPost('registration_consent') !== 'Y') {
+    $APPLICATION->ThrowException(
+        'Для регистрации необходимо согласие на обработку персональных данных.'
+    );
+    return false;
+}
     // На другом сайте ID группы нужно изменить.
     $businessGroupId = 8;
 
