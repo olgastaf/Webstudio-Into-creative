@@ -33,6 +33,11 @@ $registrationAttempt = $_SERVER['REQUEST_METHOD'] === 'POST'
 $authenticationAttempt = $_SERVER['REQUEST_METHOD'] === 'POST'
     && ($_POST['AUTH_FORM'] ?? '') === 'Y'
     && in_array($_POST['TYPE'] ?? '', ['AUTH', 'OTP'], true);
+$recoveryAttempt = $_SERVER['REQUEST_METHOD'] === 'POST'
+    && ($_POST['AUTH_FORM'] ?? '') === 'Y'
+    && ($_POST['TYPE'] ?? '') === 'SEND_PWD';
+$recoveryView = !$registrationAttempt && ($recoveryAttempt
+    || ($_SERVER['REQUEST_METHOD'] !== 'POST' && ($_GET['forgot_password'] ?? '') === 'yes'));
 // Подстраховка, если успешный вход обработан без перехода в прологе.
 if ($authenticationAttempt && $USER->IsAuthorized()) {
     LocalRedirect('/personal/');
@@ -44,7 +49,7 @@ if ($authenticationAttempt && $USER->IsAuthorized()) {
     <div class="register-modal__overlay" data-registration-close></div>
     <div class="register-modal__box" role="dialog" aria-modal="true" aria-labelledby="authorization-title" tabindex="-1">
         <button type="button" class="register-modal__close" data-registration-close aria-label="Закрыть">&times;</button>
-        <div id="login-panel" data-auth-panel="login" <?=$registrationAttempt ? 'hidden' : ''?>>
+        <div id="login-panel" data-auth-panel="login" <?=($registrationAttempt || $recoveryView) ? 'hidden' : ''?>>
             <?php $APPLICATION->IncludeComponent(
                 'bitrix:system.auth.form',
                 'individual-business-auth',
@@ -53,6 +58,16 @@ if ($authenticationAttempt && $USER->IsAuthorized()) {
                     'FORGOT_PASSWORD_URL' => '/auth/',
                     'PROFILE_URL' => '/personal/',
                     'SHOW_ERRORS' => 'Y',
+                ],
+                false
+            ); ?>
+        </div>
+        <div id="recovery-panel" data-auth-panel="forgot" <?=$recoveryView ? '' : 'hidden'?>>
+            <?php $APPLICATION->IncludeComponent(
+                'bitrix:system.auth.forgotpasswd',
+                'individual-business-forgot',
+                [
+                    'AUTH_RESULT' => $recoveryAttempt ? ($APPLICATION->arAuthResult ?? null) : null,
                 ],
                 false
             ); ?>

@@ -48,7 +48,8 @@
             modal.querySelectorAll('[data-auth-panel]').forEach(function (panel) {
                 panel.hidden = panel.dataset.authPanel !== view;
             });
-            box.setAttribute('aria-labelledby', view === 'registration' ? 'registration-title' : 'authorization-title');
+            const titles = { registration: 'registration-title', login: 'authorization-title', forgot: 'recovery-title' };
+            box.setAttribute('aria-labelledby', titles[view] || titles.login);
             box.scrollTop = 0;
         }
         function focusPanel() {
@@ -97,6 +98,7 @@
             }
         });
         if (modal.querySelector('[data-registration-open="Y"]')) openModal('registration');
+        else if (modal.querySelector('[data-recovery-open="Y"]')) openModal('forgot');
         else if (modal.querySelector('[data-authentication-open="Y"]')) openModal('login');
     }
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initRegistration);

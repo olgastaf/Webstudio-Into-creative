@@ -70,7 +70,7 @@ $formName = 'system_auth_form' . $arResult['RND'];
                 <?php if ($otp): ?>
                     <a href="<?=$arResult['AUTH_LOGIN_URL']?>">Ввести email и пароль заново</a>
                 <?php else: ?>
-                    <a href="<?=$arResult['AUTH_FORGOT_PASSWORD_URL']?>">Забыли пароль?</a>
+                    <a href="<?=$arResult['AUTH_FORGOT_PASSWORD_URL']?>" data-auth-view="forgot">Забыли пароль?</a>
                     <?php if (($arResult['NEW_USER_REGISTRATION'] ?? 'N') === 'Y'): ?>
                         <a href="#registration-panel" data-auth-view="registration">Зарегистрироваться</a>
                     <?php endif; ?>

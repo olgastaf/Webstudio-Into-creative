@@ -42,3 +42,6 @@
 .authorization-form { display: grid; gap: 14px; }
 .authorization-links { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px 18px; font-size: 14px; line-height: 1.5; }
 .authorization-links a { color: var(--registration-accent); text-decoration: underline; }
+
+.password-recovery-form { display: grid; gap: 14px; }
+.password-recovery__back { margin-top: 20px; }
