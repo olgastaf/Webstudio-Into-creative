@@ -41,26 +41,44 @@
         if (!modal || modal.dataset.initialized) return;
         modal.dataset.initialized = 'Y';
         const box = modal.querySelector('.register-modal__box');
-        const opener = document.getElementById('open-register');
+        const openers = document.querySelectorAll('[data-auth-view]');
         let previousFocus = null;
         let previousOverflow = '';
-        function openModal() {
-            if (!modal.hidden) return;
-            previousFocus = document.activeElement;
-            previousOverflow = document.body.style.overflow;
-            modal.hidden = false;
-            document.body.style.overflow = 'hidden';
-            const message = modal.querySelector('.registration-message');
+        function setView(view) {
+            modal.querySelectorAll('[data-auth-panel]').forEach(function (panel) {
+                panel.hidden = panel.dataset.authPanel !== view;
+            });
+            box.setAttribute('aria-labelledby', view === 'registration' ? 'registration-title' : 'authorization-title');
+            box.scrollTop = 0;
+        }
+        function focusPanel() {
+            const panel = modal.querySelector('[data-auth-panel]:not([hidden])');
+            const message = panel && Array.from(panel.querySelectorAll('.registration-message')).find(function (node) { return !node.hidden; });
             (message || box).focus();
+        }
+        function openModal(view) {
+            setView(view);
+            if (modal.hidden) {
+                previousFocus = document.activeElement;
+                previousOverflow = document.body.style.overflow;
+                modal.hidden = false;
+                document.body.style.overflow = 'hidden';
+            }
+            focusPanel();
         }
         function closeModal() {
             if (modal.hidden) return;
             modal.hidden = true;
             document.body.style.overflow = previousOverflow;
-            const target = previousFocus && previousFocus !== document.body ? previousFocus : opener;
+            const target = previousFocus && previousFocus !== document.body ? previousFocus : document.getElementById('open-auth');
             if (target) target.focus();
         }
-        if (opener) opener.addEventListener('click', openModal);
+        openers.forEach(function (opener) {
+            opener.addEventListener('click', function (event) {
+                event.preventDefault();
+                openModal(opener.dataset.authView);
+            });
+        });
         modal.querySelectorAll('[data-registration-close]').forEach(function (button) {
             button.addEventListener('click', closeModal);
         });
@@ -78,10 +96,10 @@
                 event.preventDefault(); first.focus();
             }
         });
-        if (modal.querySelector('[data-registration-open="Y"]')) openModal();
+        if (modal.querySelector('[data-registration-open="Y"]')) openModal('registration');
+        else if (modal.querySelector('[data-authentication-open="Y"]')) openModal('login');
     }
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initRegistration);
     else initRegistration();
-    // Если Битрикс выводит отложенный JS, повторная инициализация безопасна.
     if (window.BX && typeof window.BX.ready === 'function') window.BX.ready(initRegistration);
 })();

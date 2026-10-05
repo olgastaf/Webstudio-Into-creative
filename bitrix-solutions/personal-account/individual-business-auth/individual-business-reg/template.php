@@ -192,6 +192,11 @@ $renderInput = static function ($key, $label, $name, $fieldValue, $type, $requir
                 <span>Я даю согласие на обработку персональных данных в соответствии с <a href="/privacy-policy/" target="_blank" rel="noopener">Политикой конфиденциальности</a>.</span>
             </label>
             <button class="registration-button" type="submit" name="register_submit_button" value="Y">Зарегистрироваться</button>
+            <div class="authorization-links">
+                <span>Уже есть аккаунт?</span>
+                <a href="#login-panel" data-auth-view="login">Войти</a>
+            </div>
         </form>
     <?php endif; ?>
 </div>
+
