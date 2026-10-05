@@ -27,27 +27,53 @@ if (
     // Эта версия компонента читает $_REQUEST.
     $_REQUEST['REGISTER'] = $_POST['REGISTER'];
 }
+// После POST открываем именно ту панель, которая была отправлена.
+$registrationAttempt = $_SERVER['REQUEST_METHOD'] === 'POST'
+    && (isset($_POST['register_submit_button']) || isset($_POST['code_submit_button']));
+$authenticationAttempt = $_SERVER['REQUEST_METHOD'] === 'POST'
+    && ($_POST['AUTH_FORM'] ?? '') === 'Y'
+    && in_array($_POST['TYPE'] ?? '', ['AUTH', 'OTP'], true);
+// Подстраховка, если успешный вход обработан без перехода в прологе.
+if ($authenticationAttempt && $USER->IsAuthorized()) {
+    LocalRedirect('/personal/');
+}
 ?>
-<button type="button" class="btn btn-primary" id="open-register">Регистрация</button>
+<button type="button" class="btn btn-primary" id="open-auth" data-auth-view="login">Войти</button>
+<button type="button" class="btn btn-primary" id="open-register" data-auth-view="registration">Регистрация</button>
 <div id="register-modal" class="register-modal" hidden>
     <div class="register-modal__overlay" data-registration-close></div>
-    <div class="register-modal__box" role="dialog" aria-modal="true" aria-labelledby="registration-title" tabindex="-1">
+    <div class="register-modal__box" role="dialog" aria-modal="true" aria-labelledby="authorization-title" tabindex="-1">
         <button type="button" class="register-modal__close" data-registration-close aria-label="Закрыть">&times;</button>
-        <?php
-        $APPLICATION->IncludeComponent(
-            'bitrix:main.register',
-            'individual-business-reg',
-            [
-                'SHOW_FIELDS' => ['LAST_NAME', 'NAME', 'SECOND_NAME', 'EMAIL', 'PERSONAL_PHONE', 'WORK_COMPANY'],
-                'USER_PROPERTY' => ['UF_CLIENT_TYPE', 'UF_INN', 'UF_KPP', 'UF_BUSINESS_ADDRESS'],
-                'REQUIRED_FIELDS' => ['LAST_NAME', 'NAME', 'EMAIL', 'PERSONAL_PHONE'],
-                'AUTH' => 'Y',
-                'USE_BACKURL' => 'N',
-                'SUCCESS_PAGE' => '',
-                'SET_TITLE' => 'N',
-            ],
-            false
-        );
-        ?>
+        <div id="login-panel" data-auth-panel="login" <?=$registrationAttempt ? 'hidden' : ''?>>
+            <?php $APPLICATION->IncludeComponent(
+                'bitrix:system.auth.form',
+                'individual-business-auth',
+                [
+                    'REGISTER_URL' => '/auth/',
+                    'FORGOT_PASSWORD_URL' => '/auth/',
+                    'PROFILE_URL' => '/personal/',
+                    'SHOW_ERRORS' => 'Y',
+                ],
+                false
+            ); ?>
+        </div>
+        <div id="registration-panel" data-auth-panel="registration" <?=$registrationAttempt ? '' : 'hidden'?>>
+            <?php
+            $APPLICATION->IncludeComponent(
+                'bitrix:main.register',
+                'individual-business-reg',
+                [
+                    'SHOW_FIELDS' => ['LAST_NAME', 'NAME', 'SECOND_NAME', 'EMAIL', 'PERSONAL_PHONE', 'WORK_COMPANY'],
+                    'USER_PROPERTY' => ['UF_CLIENT_TYPE', 'UF_INN', 'UF_KPP', 'UF_BUSINESS_ADDRESS'],
+                    'REQUIRED_FIELDS' => ['LAST_NAME', 'NAME', 'EMAIL', 'PERSONAL_PHONE'],
+                    'AUTH' => 'Y',
+                    'USE_BACKURL' => 'N',
+                    'SUCCESS_PAGE' => '',
+                    'SET_TITLE' => 'N',
+                ],
+                false
+            );
+            ?>
+        </div>
     </div>
 </div>
