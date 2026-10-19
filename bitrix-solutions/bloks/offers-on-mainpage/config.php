@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 return [
     'iblock_id' => 16,
