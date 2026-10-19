@@ -1,107 +1,22 @@
-<?define("INDEX_PAGE", "Y");?>
-
-<?define("MAIN_PAGE", true);?>
-<?require($_SERVER["DOCUMENT_ROOT"]."/bitrix/header.php");
-$APPLICATION->SetPageProperty("title", "Интернет-магазин электротехнических изделий DDV");
-$APPLICATION->SetPageProperty("keywords", "электротехника, электрооборудование");
-$APPLICATION->SetPageProperty("description", "Интернет-магазин электрооборудования и электротехнических изделий DDV");
-$APPLICATION->SetTitle("Интернет-магазин электротехнических изделий DDV");?>
 <?
-	//include module
-	\Bitrix\Main\Loader::includeModule("dw.deluxe");
-
-	//vars
-	$catalogIblockId = null;
-	$arPriceCodes = array();
-
-	//get template settings
-	$arTemplateSettings = DwSettings::getInstance()->getCurrentSettings();
-	if(!empty($arTemplateSettings)){
-		$catalogIblockId = $arTemplateSettings["TEMPLATE_PRODUCT_IBLOCK_ID"];
-		$arPriceCodes = explode(", ", $arTemplateSettings["TEMPLATE_PRICE_CODES"]);
-	}
+require($_SERVER["DOCUMENT_ROOT"]."/bitrix/header.php");
+$APPLICATION->SetTitle("Title");
 ?>
-<?$APPLICATION->IncludeComponent(
-	"dresscode:slider", 
-	"promoSlider", 
-	array(
-		"IBLOCK_TYPE" => "slider",
-		"IBLOCK_ID" => "11",
-		"CACHE_TYPE" => "Y",
-		"CACHE_TIME" => "3600000",
-		"PICTURE_WIDTH" => "1920",
-		"PICTURE_HEIGHT" => "1080",
-		"COMPONENT_TEMPLATE" => ".default"
-	),
-	false
-);?>
-<section id="advantages" class="main-section">
-<div class="container">
-<?$APPLICATION->IncludeComponent(
-	"bitrix:main.include", 
-	".default", 
-	[
-		"AREA_FILE_SHOW" => "file",
-		"EDIT_TEMPLATE" => "",
-		"COMPONENT_TEMPLATE" => ".default",
-		"PATH" => "/include/advantages.php"
-	],
-	false
-);?>
-	</div>
-	</section>
-<section id="pop_section" class="main-section">
-<div class="container">
-<?$APPLICATION->IncludeComponent(
-	"dresscode:pop.section", 
-	".default", 
-	[
-		"CACHE_TYPE" => "Y",
-		"CACHE_TIME" => "3600000",
-		"PROP_NAME" => "UF_POPULAR",
-		"IBLOCK_TYPE" => "catalog",
-		"IBLOCK_ID" => "19",
-		"PICTURE_WIDTH" => "300",
-		"PICTURE_HEIGHT" => "300",
-		"PROP_VALUE" => "Y",
-		"ELEMENTS_COUNT" => "10",
-		"SORT_PROPERTY_NAME" => "sort",
-		"SORT_VALUE" => "ASC",
-		"SELECT_FIELDS" => [
-			0 => "NAME",
-			1 => "SECTION_PAGE_URL",
-			2 => "DETAIL_PICTURE",
-			3 => "UF_IMAGES",
-			4 => "UF_MARKER",
-			5 => "",
-		],
-		"POP_LAST_ELEMENT" => "Y",
-		"COMPONENT_TEMPLATE" => ".default",
-		"LAZY_LOAD_PICTURES" => "N"
-	],
-	false,
-	[
-		"ACTIVE_COMPONENT" => "Y"
-	]
-);?>
-	</div>
-	</section>
-
 <?php
 $activeTab = 'all';
 
 $tabFilters = [
     'all'        => [],
-    'automation' => ['=PROPERTY_USAGE' => 72],
-    'shield'     => ['=PROPERTY_USAGE' => 73],
-    'mount'      => ['=PROPERTY_USAGE' => 74],
-    'home'       => ['=PROPERTY_USAGE' => 75],
-    'lighting'   => ['=PROPERTY_USAGE' => 76],
+    'student' => ['=PROPERTY_USAGE' => 175],
+    'busines'     => ['=PROPERTY_USAGE' => 176],
+    'home'      => ['=PROPERTY_USAGE' => 177],
+    'office'       => ['=PROPERTY_USAGE' => 178],
+    'exam'   => ['=PROPERTY_USAGE' => 179],
 ];
 
 global $arrFilter;
 $arrFilter = array_merge(
-    ['=PROPERTY_OFFERS' => 27],
+    ['=PROPERTY_OFFERS' => 9],
     $tabFilters[$activeTab]
 );
 ?>
@@ -113,18 +28,18 @@ $arrFilter = array_merge(
 
 <div class="js-tabs">
     <button type="button" class="js-tab is-active" data-tab="all">Все товары</button>
-    <button type="button" class="js-tab" data-tab="automation">Для автоматизации</button>
-    <button type="button" class="js-tab" data-tab="shield">Сборка щита</button>
-    <button type="button" class="js-tab" data-tab="mount">Для удобного монтажа</button>
+    <button type="button" class="js-tab" data-tab="student">Для студентов</button>
+    <button type="button" class="js-tab" data-tab="busines">Для бизнеса</button>
+    <button type="button" class="js-tab" data-tab="office">Для офиса</button>
     <button type="button" class="js-tab" data-tab="home">Для дома</button>
-    <button type="button" class="js-tab" data-tab="lighting">Освещение</button>
+    <button type="button" class="js-tab" data-tab="exam">Для экзаменов</button>
 </div>
 
 <div class="js-carousel-wrap">
 <? 
 global $arrFilter;
 $arrFilter = [
-    '=PROPERTY_OFFERS' => 27,
+    '=PROPERTY_OFFERS' => 9,
 ];
 $APPLICATION->IncludeComponent(
 	"bitrix:catalog.section", 
@@ -163,7 +78,7 @@ $APPLICATION->IncludeComponent(
 		"FILTER_NAME" => "arrFilter",
 		"HIDE_NOT_AVAILABLE" => "N",
 		"HIDE_NOT_AVAILABLE_OFFERS" => "N",
-		"IBLOCK_ID" => "19",
+		"IBLOCK_ID" => "16",
 		"IBLOCK_TYPE" => "catalog",
 		"INCLUDE_SUBSECTIONS" => "Y",
 		"LABEL_PROP" => [
@@ -264,104 +179,24 @@ $APPLICATION->IncludeComponent(
 	</div>
 	</section>
 
-<section id="aktsii" class="main-section">
-<div class="container">
-<?$APPLICATION->IncludeComponent(
-	"bitrix:news.list", 
-	"aktsii", 
-	[
-		"IBLOCK_TYPE" => "info",
-		"IBLOCK_ID" => "10",
-		"NEWS_COUNT" => "20",
-		"SORT_BY1" => "SORT",
-		"SORT_ORDER1" => "ASC",
-		"SORT_BY2" => "NAME",
-		"SORT_ORDER2" => "ASC",
-		"FIELD_CODE" => [
-			0 => "",
-			1 => "",
-			2 => "",
-		],
-		"PROPERTY_CODE" => [
-			0 => "",
-			1 => "",
-			2 => "",
-		],
-		"DETAIL_URL" => "",
-		"SECTION_URL" => $arResult["FOLDER"].$arResult["URL_TEMPLATES"]["section"],
-		"IBLOCK_URL" => $arResult["FOLDER"].$arResult["URL_TEMPLATES"]["news"],
-		"DISPLAY_PANEL" => $arParams["DISPLAY_PANEL"],
-		"SET_TITLE" => "N",
-		"SET_LAST_MODIFIED" => "N",
-		"MESSAGE_404" => "",
-		"SET_STATUS_404" => "N",
-		"SHOW_404" => "N",
-		"FILE_404" => $arParams["FILE_404"],
-		"INCLUDE_IBLOCK_INTO_CHAIN" => "N",
-		"CACHE_TYPE" => "A",
-		"CACHE_TIME" => "",
-		"CACHE_FILTER" => "N",
-		"CACHE_GROUPS" => "N",
-		"DISPLAY_TOP_PAGER" => "N",
-		"DISPLAY_BOTTOM_PAGER" => "N",
-		"PAGER_TITLE" => "",
-		"PAGER_TEMPLATE" => "round",
-		"PAGER_SHOW_ALWAYS" => "N",
-		"PAGER_DESC_NUMBERING" => "N",
-		"PAGER_DESC_NUMBERING_CACHE_TIME" => "",
-		"PAGER_SHOW_ALL" => "N",
-		"PAGER_BASE_LINK_ENABLE" => "N",
-		"PAGER_BASE_LINK" => $arParams["PAGER_BASE_LINK"],
-		"PAGER_PARAMS_NAME" => $arParams["PAGER_PARAMS_NAME"],
-		"DISPLAY_DATE" => $arParams["DISPLAY_DATE"],
-		"DISPLAY_NAME" => "Y",
-		"DISPLAY_PICTURE" => $arParams["DISPLAY_PICTURE"],
-		"DISPLAY_PREVIEW_TEXT" => $arParams["DISPLAY_PREVIEW_TEXT"],
-		"PREVIEW_TRUNCATE_LEN" => "",
-		"ACTIVE_DATE_FORMAT" => $arParams["LIST_ACTIVE_DATE_FORMAT"],
-		"USE_PERMISSIONS" => $arParams["USE_PERMISSIONS"],
-		"GROUP_PERMISSIONS" => $arParams["GROUP_PERMISSIONS"],
-		"FILTER_NAME" => "",
-		"HIDE_LINK_WHEN_NO_DETAIL" => "N",
-		"CHECK_DATES" => "N",
-		"COMPONENT_TEMPLATE" => "aktsii",
-		"AJAX_MODE" => "N",
-		"AJAX_OPTION_JUMP" => "N",
-		"AJAX_OPTION_STYLE" => "Y",
-		"AJAX_OPTION_HISTORY" => "N",
-		"AJAX_OPTION_ADDITIONAL" => "",
-		"SET_BROWSER_TITLE" => "N",
-		"SET_META_KEYWORDS" => "N",
-		"SET_META_DESCRIPTION" => "N",
-		"ADD_SECTIONS_CHAIN" => "N",
-		"PARENT_SECTION" => "",
-		"PARENT_SECTION_CODE" => "",
-		"INCLUDE_SUBSECTIONS" => "N",
-		"STRICT_SECTION_CHECK" => "N"
-	],
-	$component
-);?>
-	</div>
-	</section>
-
-<section id="news" data-offers="26" class="main-section js-carousel-section">
+<section id="news" data-offers="10" class="main-section js-carousel-section">
 <div class="container">
 	<div class="section__title">Новинки</div>
 
 
 <div class="js-tabs">
     <button type="button" class="js-tab is-active" data-tab="all">Все товары</button>
-    <button type="button" class="js-tab" data-tab="automation">Для автоматизации</button>
-    <button type="button" class="js-tab" data-tab="shield">Сборка щита</button>
-    <button type="button" class="js-tab" data-tab="mount">Для удобного монтажа</button>
+    <button type="button" class="js-tab" data-tab="student">Для студентов</button>
+    <button type="button" class="js-tab" data-tab="busines">Для бизнеса</button>
+    <button type="button" class="js-tab" data-tab="office">Для офиса</button>
     <button type="button" class="js-tab" data-tab="home">Для дома</button>
-    <button type="button" class="js-tab" data-tab="lighting">Освещение</button>
+    <button type="button" class="js-tab" data-tab="exam">Для экзаменов</button>
 </div>
 
 <div class="js-carousel-wrap">
 <? global $arrFilter;
 $arrFilter = [
-    '=PROPERTY_OFFERS' => 26,
+    '=PROPERTY_OFFERS' => 10,
 ]; 
 $APPLICATION->IncludeComponent(
 	"bitrix:catalog.section", 
@@ -400,7 +235,7 @@ $APPLICATION->IncludeComponent(
 		"FILTER_NAME" => "arrFilter",
 		"HIDE_NOT_AVAILABLE" => "N",
 		"HIDE_NOT_AVAILABLE_OFFERS" => "N",
-		"IBLOCK_ID" => "19",
+		"IBLOCK_ID" => "16",
 		"IBLOCK_TYPE" => "catalog",
 		"INCLUDE_SUBSECTIONS" => "Y",
 		"LABEL_PROP" => [
@@ -501,25 +336,25 @@ $APPLICATION->IncludeComponent(
 	</div>
 	</section>
 
-<section id="best" data-offers="29" class="main-section js-carousel-section">
+<section id="best" data-offers="11" class="main-section js-carousel-section">
 <div class="container">
 	<div class="section__title">Лучшие предложения</div>
 
 
 <div class="js-tabs">
     <button type="button" class="js-tab is-active" data-tab="all">Все товары</button>
-    <button type="button" class="js-tab" data-tab="automation">Для автоматизации</button>
-    <button type="button" class="js-tab" data-tab="shield">Сборка щита</button>
-    <button type="button" class="js-tab" data-tab="mount">Для удобного монтажа</button>
+    <button type="button" class="js-tab" data-tab="student">Для студентов</button>
+    <button type="button" class="js-tab" data-tab="busines">Для бизнеса</button>
+    <button type="button" class="js-tab" data-tab="office">Для офиса</button>
     <button type="button" class="js-tab" data-tab="home">Для дома</button>
-    <button type="button" class="js-tab" data-tab="lighting">Освещение</button>
+    <button type="button" class="js-tab" data-tab="exam">Для экзаменов</button>
 </div>
 
 <div class="js-carousel-wrap">
 <? 
 global $arrFilter;
 $arrFilter = [
-    '=PROPERTY_OFFERS' => 29,
+    '=PROPERTY_OFFERS' => 11,
 ];
 $APPLICATION->IncludeComponent(
 	"bitrix:catalog.section", 
@@ -558,7 +393,7 @@ $APPLICATION->IncludeComponent(
 		"FILTER_NAME" => "arrFilter",
 		"HIDE_NOT_AVAILABLE" => "N",
 		"HIDE_NOT_AVAILABLE_OFFERS" => "N",
-		"IBLOCK_ID" => "19",
+		"IBLOCK_ID" => "16",
 		"IBLOCK_TYPE" => "catalog",
 		"INCLUDE_SUBSECTIONS" => "Y",
 		"LABEL_PROP" => [
@@ -703,7 +538,7 @@ BX.ready(function () {
     $tab.addClass('is-active');
 
     $.ajax({
-      url: '/local/ajax/hit-carousel.php',
+      url: '/ajax/hit-carousel.php',
       type: 'POST',
       data: {
         tab: tab,
@@ -718,26 +553,4 @@ BX.ready(function () {
 });
 </script>
 
-<section class="main-section">
-<div class="container">
-<div id="infoTabs">
-	<div class="items">
-
-
-<?$APPLICATION->IncludeComponent(
-	"bitrix:main.include", 
-	".default", 
-	array(
-		"COMPONENT_TEMPLATE" => ".default",
-		"AREA_FILE_SHOW" => "sect",
-		"AREA_FILE_SUFFIX" => "simplyText",
-		"AREA_FILE_RECURSIVE" => "Y",
-		"EDIT_TEMPLATE" => ""
-	),
-	false
-);?>
-	</div>
-	</div>
-</div>
-</section>
-
+<?require($_SERVER["DOCUMENT_ROOT"]."/bitrix/footer.php");?>

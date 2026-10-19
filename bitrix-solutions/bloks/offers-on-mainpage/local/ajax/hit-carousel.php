@@ -10,11 +10,11 @@ $tab = $_POST['tab'] ?? 'all';
 
 $tabFilters = [
     'all'        => [],
-    'automation' => ['=PROPERTY_USAGE' => 72],
-    'shield'     => ['=PROPERTY_USAGE' => 73],
-    'mount'      => ['=PROPERTY_USAGE' => 74],
-    'home'       => ['=PROPERTY_USAGE' => 75],
-    'lighting'   => ['=PROPERTY_USAGE' => 76],
+    'student' => ['=PROPERTY_USAGE' => 175],
+    'busines'     => ['=PROPERTY_USAGE' => 176],
+    'home'      => ['=PROPERTY_USAGE' => 177],
+    'office'       => ['=PROPERTY_USAGE' => 178],
+    'exam'   => ['=PROPERTY_USAGE' => 179],
 ];
 
 if (!isset($tabFilters[$tab])) {
@@ -64,7 +64,7 @@ $APPLICATION->IncludeComponent(
 		"FILTER_NAME" => "arrFilter",
 		"HIDE_NOT_AVAILABLE" => "N",
 		"HIDE_NOT_AVAILABLE_OFFERS" => "N",
-		"IBLOCK_ID" => "19",
+		"IBLOCK_ID" => "16",
 		"IBLOCK_TYPE" => "catalog",
 		"INCLUDE_SUBSECTIONS" => "Y",
 		"LABEL_PROP" => [

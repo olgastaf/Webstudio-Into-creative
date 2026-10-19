@@ -3,16 +3,16 @@ $activeTab = 'all';
 
 $tabFilters = [
     'all'        => [],
-    'automation' => ['=PROPERTY_USAGE' => 72],
-    'shield'     => ['=PROPERTY_USAGE' => 73],
-    'mount'      => ['=PROPERTY_USAGE' => 74],
-    'home'       => ['=PROPERTY_USAGE' => 75],
-    'lighting'   => ['=PROPERTY_USAGE' => 76],
+    'student' => ['=PROPERTY_USAGE' => 175],
+    'busines'     => ['=PROPERTY_USAGE' => 176],
+    'home'      => ['=PROPERTY_USAGE' => 177],
+    'office'       => ['=PROPERTY_USAGE' => 178],
+    'exam'   => ['=PROPERTY_USAGE' => 179],
 ];
 
 global $arrFilter;
 $arrFilter = array_merge(
-    ['=PROPERTY_OFFERS' => 27],
+    ['=PROPERTY_OFFERS' => 9],
     $tabFilters[$activeTab]
 );
 ?>
@@ -24,18 +24,18 @@ $arrFilter = array_merge(
 
 <div class="js-tabs">
     <button type="button" class="js-tab is-active" data-tab="all">Все товары</button>
-    <button type="button" class="js-tab" data-tab="automation">Для автоматизации</button>
-    <button type="button" class="js-tab" data-tab="shield">Сборка щита</button>
-    <button type="button" class="js-tab" data-tab="mount">Для удобного монтажа</button>
+    <button type="button" class="js-tab" data-tab="student">Для студентов</button>
+    <button type="button" class="js-tab" data-tab="busines">Для бизнеса</button>
+    <button type="button" class="js-tab" data-tab="office">Для офиса</button>
     <button type="button" class="js-tab" data-tab="home">Для дома</button>
-    <button type="button" class="js-tab" data-tab="lighting">Освещение</button>
+    <button type="button" class="js-tab" data-tab="exam">Для экзаменов</button>
 </div>
 
 <div class="js-carousel-wrap">
 <? 
 global $arrFilter;
 $arrFilter = [
-    '=PROPERTY_OFFERS' => 27,
+    '=PROPERTY_OFFERS' => 9,
 ];
 $APPLICATION->IncludeComponent(
 	"bitrix:catalog.section", 
@@ -74,7 +74,7 @@ $APPLICATION->IncludeComponent(
 		"FILTER_NAME" => "arrFilter",
 		"HIDE_NOT_AVAILABLE" => "N",
 		"HIDE_NOT_AVAILABLE_OFFERS" => "N",
-		"IBLOCK_ID" => "19",
+		"IBLOCK_ID" => "16",
 		"IBLOCK_TYPE" => "catalog",
 		"INCLUDE_SUBSECTIONS" => "Y",
 		"LABEL_PROP" => [

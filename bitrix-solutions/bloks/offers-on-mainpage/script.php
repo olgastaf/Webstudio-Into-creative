@@ -43,7 +43,7 @@ BX.ready(function () {
     $tab.addClass('is-active');
 
     $.ajax({
-      url: '/local/ajax/hit-carousel.php',
+      url: '/ajax/hit-carousel.php',
       type: 'POST',
       data: {
         tab: tab,
