@@ -101,7 +101,7 @@ $offersId = 9;
             "FILTER_NAME" => "arrFilter",
             "HIDE_NOT_AVAILABLE" => "N",
             "HIDE_NOT_AVAILABLE_OFFERS" => "N",
-            "IBLOCK_ID" => "16",
+            "IBLOCK_ID" => $iblockId,
             "IBLOCK_TYPE" => "catalog",
             "INCLUDE_SUBSECTIONS" => "Y",
             "LABEL_PROP" => [
@@ -263,7 +263,7 @@ $offersId = 10;
           "FILTER_NAME" => "arrFilter",
           "HIDE_NOT_AVAILABLE" => "N",
           "HIDE_NOT_AVAILABLE_OFFERS" => "N",
-          "IBLOCK_ID" => "16",
+          "IBLOCK_ID" => $iblockId,
           "IBLOCK_TYPE" => "catalog",
           "INCLUDE_SUBSECTIONS" => "Y",
           "LABEL_PROP" => [
@@ -438,7 +438,7 @@ $APPLICATION->IncludeComponent(
 		"FILTER_NAME" => "arrFilter",
 		"HIDE_NOT_AVAILABLE" => "N",
 		"HIDE_NOT_AVAILABLE_OFFERS" => "N",
-		"IBLOCK_ID" => "16",
+		"IBLOCK_ID" => $iblockId,
 		"IBLOCK_TYPE" => "catalog",
 		"INCLUDE_SUBSECTIONS" => "Y",
 		"LABEL_PROP" => [
@@ -540,7 +540,6 @@ $APPLICATION->IncludeComponent(
 <script>
 BX.ready(function () {
 function initCarousel($scope) {
-console.log('initCarousel запущена');
   $scope.find('.hit-carousel').each(function () {
     var carousel = this;
     var swiperElement = carousel.querySelector('.swiper');
