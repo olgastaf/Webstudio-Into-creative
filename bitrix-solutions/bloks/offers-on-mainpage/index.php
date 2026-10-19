@@ -4,32 +4,6 @@ $APPLICATION->SetTitle("Title");
 ?>
 
 <?php
-function hasTabProducts($iblockId, $offersId, $usageId = null)
-{
-    $filter = [
-        'IBLOCK_ID' => $iblockId,
-        'ACTIVE' => 'Y',
-        'ACTIVE_DATE' => 'Y',
-        '=PROPERTY_OFFERS' => $offersId,
-    ];
-
-    if ($usageId !== null) {
-        $filter['=PROPERTY_USAGE'] = $usageId;
-    }
-
-    $result = CIBlockElement::GetList(
-        [],
-        $filter,
-        false,
-        ['nTopCount' => 1],
-        ['ID']
-    );
-
-    return (bool)$result->Fetch();
-}
-?>
-
-<?php
 // Хиты продаж
 $sectionCode = 'hits';
 include __DIR__ . '/section.php';
