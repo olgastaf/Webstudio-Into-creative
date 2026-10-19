@@ -225,6 +225,5 @@ $arrFilter = [
         ],
         false
     );?>
-        ?>
     </div>
 </section>
