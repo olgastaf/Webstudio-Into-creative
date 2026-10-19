@@ -166,11 +166,12 @@ $containerName = 'container-'.$navParams['NavNum'];
 		$areaIds = [];
 		$itemParameters = [];?>
 <div data-showcase>
-        <div class = "hit-carousel">
+	<div class = "hit-carousel">
 
 				<button type="button" class="hit-carousel-prev" aria-label="Назад"></button>
 				<button type="button" class="hit-carousel-next" aria-label="Вперёд"></button>
-            <ul class = "slideBox productList">		
+		<div class="swiper">
+            <ul class = "swiper-wrapper productList">		
 		<? foreach ($arResult['ITEMS'] as $item)
 		{
 			$uniqueId = $item['ID'].'_'.md5($this->randString().$component->getAction());
@@ -185,7 +186,7 @@ $containerName = 'container-'.$navParams['NavNum'];
 					: $arParams['~MESS_NOT_AVAILABLE']
 				),
 			];?>
-				<li class = "slideItem">
+				<li class = "swiper-slide slideItem">
 					<?$APPLICATION->IncludeComponent(
     "dresscode:catalog.item",
     "",
@@ -237,8 +238,9 @@ $containerName = 'container-'.$navParams['NavNum'];
 		unset($generalParams);
 		?>
             </ul>
-	</div>
-</div>
+		</div><!-- .swiper -->
+	</div><!-- .hit-carousel -->
+</div><!-- [data-showcase] -->
 		<?
 	}
 	else
