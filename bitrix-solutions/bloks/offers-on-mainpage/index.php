@@ -2,44 +2,72 @@
 require($_SERVER["DOCUMENT_ROOT"]."/bitrix/header.php");
 $APPLICATION->SetTitle("Title");
 ?>
+
 <?php
-$activeTab = 'all';
+function hasTabProducts($iblockId, $offersId, $usageId = null)
+{
+    $filter = [
+        'IBLOCK_ID' => $iblockId,
+        'ACTIVE' => 'Y',
+        'ACTIVE_DATE' => 'Y',
+        '=PROPERTY_OFFERS' => $offersId,
+    ];
 
-$tabFilters = [
-    'all'        => [],
-    'student' => ['=PROPERTY_USAGE' => 175],
-    'busines'     => ['=PROPERTY_USAGE' => 176],
-    'home'      => ['=PROPERTY_USAGE' => 177],
-    'office'       => ['=PROPERTY_USAGE' => 178],
-    'exam'   => ['=PROPERTY_USAGE' => 179],
-];
+    if ($usageId !== null) {
+        $filter['=PROPERTY_USAGE'] = $usageId;
+    }
 
-global $arrFilter;
-$arrFilter = array_merge(
-    ['=PROPERTY_OFFERS' => 9],
-    $tabFilters[$activeTab]
-);
+    $result = CIBlockElement::GetList(
+        [],
+        $filter,
+        false,
+        ['nTopCount' => 1],
+        ['ID']
+    );
+
+    return (bool)$result->Fetch();
+}
 ?>
 
-<section id="hits" data-offers="27" class="main-section js-carousel-section">
-<div class="container">
+<?php
+$offersId = 9;
+$iblockId = 16;
+?>
+
+<section id="hits" data-offers="<?=(int)$offersId ?>" class="main-section js-carousel-section">
 	<div class="section__title">Хиты продаж</div>
 
+<?php
+
+$tabs = [
+    'all'     => ['title' => 'Все товары', 'usage' => null],
+    'student' => ['title' => 'Для студентов', 'usage' => 175],
+    'busines' => ['title' => 'Для бизнеса', 'usage' => 176],
+    'office'  => ['title' => 'Для офиса', 'usage' => 178],
+    'home'    => ['title' => 'Для дома', 'usage' => 177],
+    'exam'    => ['title' => 'Для экзаменов', 'usage' => 179],
+];
+?>
 
 <div class="js-tabs">
-    <button type="button" class="js-tab is-active" data-tab="all">Все товары</button>
-    <button type="button" class="js-tab" data-tab="student">Для студентов</button>
-    <button type="button" class="js-tab" data-tab="busines">Для бизнеса</button>
-    <button type="button" class="js-tab" data-tab="office">Для офиса</button>
-    <button type="button" class="js-tab" data-tab="home">Для дома</button>
-    <button type="button" class="js-tab" data-tab="exam">Для экзаменов</button>
+    <?php foreach ($tabs as $code => $tab): ?>
+        <?php if (hasTabProducts($iblockId, $offersId, $tab['usage'])): ?>
+            <button
+                type="button"
+                class="js-tab <?= $code === 'all' ? 'is-active' : '' ?>"
+                data-tab="<?= htmlspecialcharsbx($code) ?>"
+            >
+                <?= htmlspecialcharsbx($tab['title']) ?>
+            </button>
+        <?php endif; ?>
+    <?php endforeach; ?>
 </div>
 
 <div class="js-carousel-wrap">
 <? 
 global $arrFilter;
 $arrFilter = [
-    '=PROPERTY_OFFERS' => 9,
+    '=PROPERTY_OFFERS' => $offersId,
 ];
 $APPLICATION->IncludeComponent(
 	"bitrix:catalog.section", 
@@ -176,27 +204,46 @@ $APPLICATION->IncludeComponent(
 	false
 );?>
 	</div>
-	</div>
 	</section>
 
-<section id="news" data-offers="10" class="main-section js-carousel-section">
-<div class="container">
+<?php
+$offersId = 10;
+?>
+
+<section id="news" data-offers="<?=(int)$offersId ?>" class="main-section js-carousel-section">
 	<div class="section__title">Новинки</div>
 
 
+<?php
+
+$tabs = [
+    'all'     => ['title' => 'Все товары', 'usage' => null],
+    'student' => ['title' => 'Для студентов', 'usage' => 175],
+    'busines' => ['title' => 'Для бизнеса', 'usage' => 176],
+    'office'  => ['title' => 'Для офиса', 'usage' => 178],
+    'home'    => ['title' => 'Для дома', 'usage' => 177],
+    'exam'    => ['title' => 'Для экзаменов', 'usage' => 179],
+];
+?>
+
 <div class="js-tabs">
-    <button type="button" class="js-tab is-active" data-tab="all">Все товары</button>
-    <button type="button" class="js-tab" data-tab="student">Для студентов</button>
-    <button type="button" class="js-tab" data-tab="busines">Для бизнеса</button>
-    <button type="button" class="js-tab" data-tab="office">Для офиса</button>
-    <button type="button" class="js-tab" data-tab="home">Для дома</button>
-    <button type="button" class="js-tab" data-tab="exam">Для экзаменов</button>
+    <?php foreach ($tabs as $code => $tab): ?>
+        <?php if (hasTabProducts($iblockId, $offersId, $tab['usage'])): ?>
+            <button
+                type="button"
+                class="js-tab <?= $code === 'all' ? 'is-active' : '' ?>"
+                data-tab="<?= htmlspecialcharsbx($code) ?>"
+            >
+                <?= htmlspecialcharsbx($tab['title']) ?>
+            </button>
+        <?php endif; ?>
+    <?php endforeach; ?>
 </div>
 
 <div class="js-carousel-wrap">
 <? global $arrFilter;
 $arrFilter = [
-    '=PROPERTY_OFFERS' => 10,
+    '=PROPERTY_OFFERS' => $offersId,
 ]; 
 $APPLICATION->IncludeComponent(
 	"bitrix:catalog.section", 
@@ -333,28 +380,45 @@ $APPLICATION->IncludeComponent(
 	false
 );?>
 	</div>
-	</div>
 	</section>
 
-<section id="best" data-offers="11" class="main-section js-carousel-section">
-<div class="container">
+<?php
+$offersId = 11;
+?>
+<section id="best" data-offers="<?=(int)$offersId ?>" class="main-section js-carousel-section">
 	<div class="section__title">Лучшие предложения</div>
 
+<?php
+
+$tabs = [
+    'all'     => ['title' => 'Все товары', 'usage' => null],
+    'student' => ['title' => 'Для студентов', 'usage' => 175],
+    'busines' => ['title' => 'Для бизнеса', 'usage' => 176],
+    'office'  => ['title' => 'Для офиса', 'usage' => 178],
+    'home'    => ['title' => 'Для дома', 'usage' => 177],
+    'exam'    => ['title' => 'Для экзаменов', 'usage' => 179],
+];
+?>
 
 <div class="js-tabs">
-    <button type="button" class="js-tab is-active" data-tab="all">Все товары</button>
-    <button type="button" class="js-tab" data-tab="student">Для студентов</button>
-    <button type="button" class="js-tab" data-tab="busines">Для бизнеса</button>
-    <button type="button" class="js-tab" data-tab="office">Для офиса</button>
-    <button type="button" class="js-tab" data-tab="home">Для дома</button>
-    <button type="button" class="js-tab" data-tab="exam">Для экзаменов</button>
+    <?php foreach ($tabs as $code => $tab): ?>
+        <?php if (hasTabProducts($iblockId, $offersId, $tab['usage'])): ?>
+            <button
+                type="button"
+                class="js-tab <?= $code === 'all' ? 'is-active' : '' ?>"
+                data-tab="<?= htmlspecialcharsbx($code) ?>"
+            >
+                <?= htmlspecialcharsbx($tab['title']) ?>
+            </button>
+        <?php endif; ?>
+    <?php endforeach; ?>
 </div>
 
 <div class="js-carousel-wrap">
 <? 
 global $arrFilter;
 $arrFilter = [
-    '=PROPERTY_OFFERS' => 11,
+    '=PROPERTY_OFFERS' => $offersId,
 ];
 $APPLICATION->IncludeComponent(
 	"bitrix:catalog.section", 
@@ -491,37 +555,50 @@ $APPLICATION->IncludeComponent(
 	false
 );?>
 	</div>
-	</div>
 	</section>
 <script>
 BX.ready(function () {
-  function initCarousel($scope) {
-    $scope.find('.hit-carousel').each(function () {
-      var $carousel = $(this);
+function initCarousel($scope) {
+console.log('initCarousel запущена');
+  $scope.find('.hit-carousel').each(function () {
+    var carousel = this;
+    var swiperElement = carousel.querySelector('.swiper');
 
-      if ($carousel.data('dwCarouselReady')) return;
+    if (!swiperElement || swiperElement.swiper) {
+      return;
+    }
 
-      $carousel.dwCarousel({
-        slideItem: ".slideItem",
-        slideBox: ".slideBox",
-        countElement: 5,
-        resizeElement: true,
-        resizeAutoParams: {
-          "1600": 5,
-          "1400": 5,
-          "1000": 4,
-          "768": 3,
-          "600": 2,
-          "0": 1
+    var swiper = new Swiper(swiperElement, {
+      slidesPerView: 5,
+      spaceBetween: 8,
+      speed: 400,
+      watchOverflow: true,
+
+      navigation: {
+        prevEl: carousel.querySelector('.hit-carousel-prev'),
+        nextEl: carousel.querySelector('.hit-carousel-next')
+      },
+
+      breakpoints: {
+        0: {
+          slidesPerView: 1
         },
-        severity: 8,
-        speed: 400,
-        leftButton: ".hit-carousel-prev",
-        rightButton: ".hit-carousel-next"
-      });
+        600: {
+          slidesPerView: 2
+        },
+        768: {
+          slidesPerView: 3
+        },
+        1000: {
+          slidesPerView: 3
+        },
+        1400: {
+          slidesPerView: 5
+        }
+      }
+    });
 
-      $carousel.data('dwCarouselReady', true);
-      $carousel.addClass('is-ready');
+    carousel.classList.add('is-ready');
     });
   }
 
