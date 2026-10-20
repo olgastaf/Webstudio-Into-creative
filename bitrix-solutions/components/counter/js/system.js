@@ -40,25 +40,36 @@ var checkLazyItems = function () {
 };
 
 var changeAddCartButton = function (jsonData) {
-	//search addCart buttons
-	if (typeof jsonData["CATEGORIES"] != "undefined") {
-		if (typeof jsonData["CATEGORIES"]["READY"] != "undefined") {
-			//each basket elements
-			$.each(jsonData["CATEGORIES"]["READY"], function (index, nextElement) {
-				if (typeof nextElement["PRODUCT_ID"] != "undefined") {
-					var $currentButton = $('.addCart[data-id="' + nextElement["PRODUCT_ID"] + '"]');
-					if (typeof $currentButton != "undefined") {
-						$currentButton.each(function (ii, nextButton) {
-							updateAddCartButton($(nextButton));
-						});
-					}
-				}
-			});
+    if (
+        !jsonData ||
+        !jsonData.CATEGORIES ||
+        !jsonData.CATEGORIES.READY
+    ) {
+        return;
+    }
 
-			//save current values
-			basketProductsNow = jsonData;
-		}
-	}
+    $.each(jsonData.CATEGORIES.READY, function (index, item) {
+        if (!item.PRODUCT_ID) {
+            return;
+        }
+
+        var quantity = parseFloat(item.QUANTITY);
+
+        $('.addCart[data-id="' + item.PRODUCT_ID + '"]').each(function () {
+            var $button = $(this);
+
+            updateAddCartButton($button);
+
+            if (!isNaN(quantity) && quantity > 0) {
+                $button
+                    .siblings(".quantityContainer")
+                    .find(".quantity")
+                    .val(quantity);
+            }
+        });
+    });
+
+    basketProductsNow = jsonData;
 };
 
 var updateAddCartButton = function ($currentElement) {
