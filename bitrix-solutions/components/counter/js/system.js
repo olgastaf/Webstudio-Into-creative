@@ -2042,8 +2042,72 @@ $(window).on("ready", function (event) {
 		}
 	};
 
+	var saveCatalogBasketQuantity = function ($input) {
+		var $container = $input.closest(".addCartContainer");
+		var $button = $container.find(".addCart.added");
+		var productId = $button.data("id");
+		var quantity = parseFloat($input.val());
+
+		// До добавления в корзину счётчик работает как раньше.
+		if (!$button.length || !productId) {
+			return;
+		}
+
+		if (!isFinite(quantity) || quantity <= 0) {
+			cartReload();
+			return;
+		}
+
+		$container.data("basket-updating", true);
+		$input.prop("disabled", true);
+
+		$.ajax({
+			url: ajaxPath + (
+				ajaxPath.indexOf("?") === -1 ? "?" : "&"
+			) + $.param({
+				act: "upd",
+				id: productId,
+				q: quantity,
+				site_id: SITE_ID
+			}),
+			type: "POST",
+			dataType: "json",
+			data: {
+				sessid: BX.bitrix_sessid()
+			}
+		})
+		.done(function (response) {
+			if (response && response.success === "Y") {
+				cartReload();
+				return;
+			}
+
+			if (response && response.error === "quantityError") {
+				$input.val(response.currentQuantityValue);
+				alert("Доступное количество товара ограничено.");
+			} else {
+				alert("Не удалось изменить количество товара в корзине.");
+			}
+
+			cartReload();
+		})
+		.fail(function () {
+			alert("Не удалось сохранить количество. Проверьте корзину.");
+			cartReload();
+		})
+		.always(function () {
+			$container.removeData("basket-updating");
+			$input.prop("disabled", false);
+		});
+	};
+
 	//quantity functions
 	var productQuantityPlus = function (event) {
+
+		if ($(this).closest(".addCartContainer").data("basket-updating")) {
+			event.preventDefault();
+			return;
+		}
 		//jquery vars
 		var $this = $(this),
 			$quantityContainer = $this.parents(".quantityContainer"),
@@ -2077,6 +2141,7 @@ $(window).on("ready", function (event) {
 
 			//set quantity
 			$quantityInput.val(+quantityParams.total.toFixed(5));
+			saveCatalogBasketQuantity($quantityInput);
 		}
 
 		//excess
@@ -2089,6 +2154,12 @@ $(window).on("ready", function (event) {
 	};
 
 	var productQuantityMinus = function (event) {
+
+		if ($(this).closest(".addCartContainer").data("basket-updating")) {
+			event.preventDefault();
+			return;
+		}
+
 		//jquery vars
 		var $this = $(this),
 			$quantityContainer = $this.parents(".quantityContainer"),
@@ -2117,6 +2188,7 @@ $(window).on("ready", function (event) {
 
 		//set quantity
 		$quantityInput.val(+quantityParams.total.toFixed(5));
+		saveCatalogBasketQuantity($quantityInput);
 
 		//block actions
 		return event.preventDefault();
@@ -2135,6 +2207,12 @@ $(window).on("ready", function (event) {
 	};
 
 	var productQuantityChange = function (event) {
+
+		if ($(this).closest(".addCartContainer").data("basket-updating")) {
+			event.preventDefault();
+			return;
+		}
+
 		//jquery vars
 		var $this = $(this),
 			$quantityContainer = $this.parents(".quantityContainer");
@@ -2162,8 +2240,8 @@ $(window).on("ready", function (event) {
 
 		//check max value
 		if (
-			(quantityParams.trace == "Y" && quantityParams.value > quantityParams.max) ||
-			quantityParams.trace == "N"
+			quantityParams.trace == "Y" &&
+			quantityParams.value > quantityParams.max
 		) {
 			//set max value
 			quantityParams.value = quantityParams.max;
@@ -2184,6 +2262,7 @@ $(window).on("ready", function (event) {
 
 		//set quantity
 		$this.val(+quantityParams.value.toFixed(5));
+		saveCatalogBasketQuantity($this);
 
 		//block actions
 		return event.preventDefault();
