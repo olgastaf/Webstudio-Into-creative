@@ -90,7 +90,6 @@ $arrFilter = [
     </div>
 
     <div class="js-carousel-wrap">
-        <?php
    <? $APPLICATION->IncludeComponent(
         "bitrix:catalog.section", 
         "slider", 

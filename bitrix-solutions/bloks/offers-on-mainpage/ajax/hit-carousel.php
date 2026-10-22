@@ -5,17 +5,27 @@ use Bitrix\Main\Loader;
 
 Loader::includeModule('iblock');
 
+$config = require $_SERVER['DOCUMENT_ROOT'] . '/local/include/config.php';
+ 
+$iblockId = (int)$config['iblock_id'];
+ 
+$offersProperty = $config['properties']['offers'];
+$usageProperty = $config['properties']['usage'];
+ 
+$tabs = $config['tabs'];
+
 $offers = (int)($_POST['offers'] ?? 0);
 $tab = $_POST['tab'] ?? 'all';
 
-$tabFilters = [
-    'all'        => [],
-    'student' => ['=PROPERTY_USAGE' => 175],
-    'busines'     => ['=PROPERTY_USAGE' => 176],
-    'home'      => ['=PROPERTY_USAGE' => 177],
-    'office'       => ['=PROPERTY_USAGE' => 178],
-    'exam'   => ['=PROPERTY_USAGE' => 179],
-];
+$tabFilters = [];
+ 
+foreach ($tabs as $code => $tabConfig) {
+    $usageId = $tabConfig['usage_id'];
+ 
+    $tabFilters[$code] = $usageId === null
+        ? []
+        : ['=PROPERTY_' . $usageProperty => (int)$usageId];
+}
 
 if (!isset($tabFilters[$tab])) {
     $tab = 'all';
@@ -64,7 +74,7 @@ $APPLICATION->IncludeComponent(
 		"FILTER_NAME" => "arrFilter",
 		"HIDE_NOT_AVAILABLE" => "N",
 		"HIDE_NOT_AVAILABLE_OFFERS" => "N",
-		"IBLOCK_ID" => "16",
+		"IBLOCK_ID" => $iblockId,
 		"IBLOCK_TYPE" => "catalog",
 		"INCLUDE_SUBSECTIONS" => "Y",
 		"LABEL_PROP" => [
