@@ -167,9 +167,22 @@ $containerName = 'container-'.$navParams['NavNum'];
 		$itemParameters = [];?>
 <div data-showcase>
 	<div class = "hit-carousel">
+		<button type="button" class="hit-carousel-prev" aria-label="Назад">
+			<svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+				<path d="M15 5L8 12L15 19"
+					stroke="currentColor" stroke-width="1.5"
+					stroke-linecap="round" stroke-linejoin="round"/>
+			</svg>
+		</button>
 
-				<button type="button" class="hit-carousel-prev" aria-label="Назад"></button>
-				<button type="button" class="hit-carousel-next" aria-label="Вперёд"></button>
+		<button type="button" class="hit-carousel-next" aria-label="Вперёд">
+			<svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+				<path d="M9 5L16 12L9 19"
+					stroke="currentColor" stroke-width="1.5"
+					stroke-linecap="round" stroke-linejoin="round"/>
+			</svg>
+		</button>
+
 		<div class="swiper">
             <ul class = "swiper-wrapper productList">		
 		<? foreach ($arResult['ITEMS'] as $item)
