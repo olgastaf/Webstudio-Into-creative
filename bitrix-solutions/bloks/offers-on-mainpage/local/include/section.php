@@ -71,8 +71,28 @@ $arrFilter = [
     data-offers="<?= $offersId ?>"
     class="main-section js-carousel-section"
 >
-    <div class="section__title">
-        <?= htmlspecialcharsbx($sectionConfig['title']) ?>
+    <div class="offers-section-header">
+        <h2 class="offers-section-title">
+            <?= htmlspecialcharsbx($section['title']) ?>
+        </h2>
+
+        <div class="offers-section-navigation">
+            <button type="button" class="hit-carousel-prev" aria-label="Предыдущие товары">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M15 5L8 12L15 19"
+                        stroke="currentColor" stroke-width="1.5"
+                        stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+
+            <button type="button" class="hit-carousel-next" aria-label="Следующие товары">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M9 5L16 12L9 19"
+                        stroke="currentColor" stroke-width="1.5"
+                        stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+        </div>
     </div>
 
     <div class="js-tabs">
