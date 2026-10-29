@@ -68,6 +68,38 @@
 	background-position: -70px -70px;
 }
 
+.hit-carousel-prev,
+.hit-carousel-next {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 40px;
+    height: 40px;
+    padding: 0;
+
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 50%;
+
+    color: #333;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.hit-carousel-prev:hover,
+.hit-carousel-next:hover {
+    background: #f5f5f5;
+    border-color: #999;
+    color: #000;
+}
+
+.hit-carousel-prev svg,
+.hit-carousel-next svg {
+    width: 20px;
+    height: 20px;
+}
+
 .section__thumbs {
 	display: flex;
 	gap: 55px;
