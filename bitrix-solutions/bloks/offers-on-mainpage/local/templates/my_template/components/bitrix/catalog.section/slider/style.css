@@ -1,54 +1,32 @@
-/* Контейнер карусели */
-.dw-carousel {
-  overflow: hidden;       /* уже ставится скриптом, но можно явно */
-  position: relative;
-}
-
-/* Список слайдов */
-.dw-carousel .slideBox {
-  position: relative;
-  overflow: hidden;
-  clear: both;
-  left: 0;
-  padding: 0;
-  margin: 0;
-  list-style: none;
-}
-
-/* Элементы карусели */
-.dw-carousel .slideBox > .slideItem,
-.dw-carousel .slideBox > li {
-  float: left;            /* выстраиваем в ряд */
-  display: block;
-  box-sizing: border-box;
-  /* width задаётся скриптом, здесь не переопределяем */
-}
-  .hit-carousel {
-		position: relative;
-    visibility: hidden;
-  }
-
-  .hit-carousel.is-ready {
-    visibility: visible;
-  }
-.hit-carousel .productList {
+.hit-carousel {
     position: relative;
-    list-style: none;
+    visibility: hidden;
+}
+
+.hit-carousel.is-ready {
+    visibility: visible;
+}
+
+.hit-carousel .swiper {
+    width: 100%;
     overflow: hidden;
-    clear: both;
-    margin: 0px;
-    left: 0px;
 }
-.slideBox {
-  overflow: hidden;
+
+.hit-carousel .swiper-wrapper {
+    display: flex;
+    padding: 0;
+    margin: 0;
+    list-style: none;
 }
-.hit-carousel .productList > li {
-    float: left;
+
+.hit-carousel .swiper-slide {
+    flex-shrink: 0;
+    float: none;
+    box-sizing: border-box;
+    height: auto;
 }
-.slideItem {
-  float: left;
-}
-.slideItem .product {
+
+.hit-carousel .swiper-slide .product {
     width: 100%;
 }
 .hit-carousel .hit-carousel-prev,
@@ -90,26 +68,6 @@
 	background-position: -70px -70px;
 }
 
-/* Если внутри .slideItem есть блочная верстка, убедитесь, что она не ломает float */
-.dw-carousel .slideItem > * {
-}
-.section__title {
-	font: 500 40px/130% "Golos Text", sans-serif;
-	color: #000;
-	margin-bottom: 55px;
-}
-@media (max-width: 1199px) {
-	.section__title {
-		font: 500 32px/130% "Golos Text", sans-serif;
-		margin-bottom: 32px;
-	}
-}
-@media (max-width: 720px) {
-	.section__title {
-		font: 500 28px/130% "Golos Text", sans-serif;
-		margin-bottom: 24px;
-	}
-}
 .section__thumbs {
 	display: flex;
 	gap: 55px;
